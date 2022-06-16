@@ -17,6 +17,9 @@ use App\Http\Controllers\UserController;
 
 Auth::routes();
 
+Route::post('/home', [UserController::class, 'loginUser']);
+Route::post('/logout', [UserController::class, 'logout']);
+
 Route::group(['middleware' => 'auth'], function () {
   Route::get('/', function () {
     return view('welcome');
