@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { onMounted , ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 export default {
   setup() {
@@ -50,15 +50,7 @@ export default {
     const getUser = () => {
       axios.post('/home').then(response => user.value = response.data)
     }
-    onMounted(() => {
-      getUser()
-    })
-    return {
-      user
-    }
-  },
-  methods: {
-    logout() {
+    const logout = () => {
       axios
         .post("/logout")
         .then(() => {
@@ -71,8 +63,13 @@ export default {
           console.log(error);
         });
     }
+    onMounted(() => {
+      getUser()
+    })
+    return {
+      user,
+      logout
+    }
   },
 };
 </script>
-<style scoped>
-</style>
