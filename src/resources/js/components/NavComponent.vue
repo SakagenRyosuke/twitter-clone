@@ -10,7 +10,7 @@
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-          <router-link to="/home" class="nav-link link-dark" :class="{'active': $route.path === '/home'}">
+          <router-link to="/home" class="nav-link link-dark" :class="{ 'active': $route.path === '/home' }">
             <svg class="bi me-2" width="16" height="16">
               <use xlink:href="#home"></use>
             </svg>
@@ -36,21 +36,26 @@
               logout
             </a></li>
         </ul>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { onMounted , ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const user = ref("")
+    const getUser = () => {
+      axios.post('/home').then(response => user.value = response.data)
+    }
+    onMounted(() => {
+      getUser()
+    })
     return {
-      user: "",
-    };
-  },
-  mounted() {
-    axios.post('/home').then(response => this.user = response.data)
+      user
+    }
   },
   methods: {
     logout() {
@@ -59,7 +64,8 @@ export default {
         .then(() => {
           // login.vueを用意するつもり（時間があったら）
           // this.$router.push("/login");
-          location.href = 'http://localhost:8080/login';
+          let url = location.href;
+          location.href = url;
         })
         .catch(error => {
           console.log(error);

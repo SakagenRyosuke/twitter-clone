@@ -16,17 +16,16 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 export default {
     setup() {
         const message = ref("Hello Laravel Vue 3");
-
+        onMounted(() => {
+            console.log('Component is mounted!')
+        })
         return {
             message
         };
     },
-    mounted() {
-        console.log('Component mounted.')
-    }
 }
 </script>
