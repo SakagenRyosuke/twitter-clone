@@ -19,14 +19,14 @@ class UserTableSeeder extends Seeder
     {
         for ($i = 1; $i <= 30; $i++) {
             User::create([
-                'name'    => 'test_user' .$i,
-                'screenName'           => 'TEST' .$i,
-                'profileImage'  => 'https://placehold.jp/50x50.png',
-                'email'          => 'test' .$i .'@test.com',
-                'password'       => Hash::make('password'),
+                'name'  => 'test_user' . $i,
+                'screenName' => 'TEST' . $i,
+                'profileImage' => 'https://placehold.jp/50x50.png',
+                'email'  => 'test' . $i . '@test.com',
+                'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
-                'created_at'     => now(),
-                'updated_at'     => now()
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
         }
     }
