@@ -1,6 +1,6 @@
 <template>
-  <div class="fixed-top sideBar">
-    <div class="d-flex flex-column p-3 bg-light sideBar_content">
+  <div class="fixed-top">
+    <div class="d-flex flex-column p-3 bg-light nav-content">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
           <use xlink:href="#bootstrap"></use>
@@ -74,12 +74,8 @@ export default {
 };
 </script>
 <style scoped>
-  .sideBar {
+  .nav-content {
     width: 280px;
     height: 100vh;
-  }
-  .sideBar_content {
-    width: 100%;
-    height: 100%;
   }
 </style>
