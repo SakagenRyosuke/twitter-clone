@@ -17,7 +17,7 @@ use App\Http\Controllers\UserController;
 
 Auth::routes();
 
-Route::post('/home', [UserController::class, 'loginUser']);
+Route::get('/loginUser', [UserController::class, 'loginUser']);
 Route::post('/logout', [UserController::class, 'logout']);
 
 Route::group(['middleware' => 'auth'], function () {

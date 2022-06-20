@@ -1,6 +1,6 @@
 <template>
-  <div class="fixed-top" style="width: 280px;">
-    <div class="d-flex flex-column p-3 bg-light" style="width: 280px; height: 100vh;">
+  <div class="fixed-top sideBar">
+    <div class="d-flex flex-column p-3 bg-light sideBar_content">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
           <use xlink:href="#bootstrap"></use>
@@ -22,7 +22,7 @@
       <div class="dropdown">
         <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2"
           data-bs-toggle="dropdown" aria-expanded="false">
-          <img :src="user.profileImage" alt="" width="32" height="32" class="rounded-circle me-2">
+          <img :src="user.profileImage" alt="profile image" width="32" height="32" class="rounded-circle me-2">
           <strong>{{ user.screenName }}</strong>
         </a>
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
@@ -32,9 +32,9 @@
           <li>
             <hr class="dropdown-divider">
           </li>
-          <li><a class="dropdown-item" @click="logout">
+          <li><button class="dropdown-item" @click="logout">
               logout
-            </a></li>
+            </button></li>
         </ul>
       </div>
     </div>
@@ -48,7 +48,7 @@ export default {
   setup() {
     const user = ref("")
     const getUser = () => {
-      axios.post('/home').then(response => user.value = response.data)
+      axios.get('/loginUser').then(response => user.value = response.data)
     }
     const logout = () => {
       axios
@@ -73,3 +73,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .sideBar {
+    width: 280px;
+    height: 100vh;
+  }
+  .sideBar_content {
+    width: 100%;
+    height: 100%;
+  }
+</style>
