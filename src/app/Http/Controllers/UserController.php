@@ -27,7 +27,10 @@ class UserController extends Controller
      */
     public function userList()
     {
-        return User::all();
+        $allUser = User::all();
+        $loginUser = Auth::user();
+        unset($allUser[$loginUser["id"] - 1]);
+        return $allUser;
     }
 
     public function loginUser()
