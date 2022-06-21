@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed-top">
+  <div class="fixed-top nav-content">
     <div class="d-flex flex-column p-3 bg-light nav-content">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
@@ -15,6 +15,14 @@
               <use xlink:href="#home"></use>
             </svg>
             Home
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/home/user-list" class="nav-link link-dark" :class="{ 'active': $route.path === '/home/user-list' }">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#home"></use>
+            </svg>
+            User-List
           </router-link>
         </li>
       </ul>
