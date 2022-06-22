@@ -29,11 +29,7 @@
 
 <script>
 import { onMounted, ref } from 'vue';
-import UserList from './UserListDetailComponent.vue';
 export default {
-  components: {
-    UserList
-  },
   setup() {
     const userList = ref("")
     const getUserList = () => {
