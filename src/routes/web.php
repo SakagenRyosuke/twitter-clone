@@ -19,7 +19,8 @@ Auth::routes();
 
 Route::get('/loginUser', [UserController::class, 'loginUser']);
 Route::post('/logout', [UserController::class, 'logout']);
-Route::post('/userList', [UserController::class, 'userList']);
+Route::get('/userList', [UserController::class, 'userList']);
+Route::get('/userList/{id}', [UserController::class, 'show']);
 
 Route::group(['middleware' => 'auth'], function () {
   Route::get('/', function () {

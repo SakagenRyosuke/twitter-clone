@@ -47,10 +47,8 @@ class UserController extends Controller
         $request->session()->regenerateToken();
     }
 
-    public function show($id)
+    public function show(User $id)
     {
-        $user = User::find($id);
-
-        return view('user.show', compact('user'));
+        return $id;
     }
 }

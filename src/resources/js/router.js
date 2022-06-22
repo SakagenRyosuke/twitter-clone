@@ -1,5 +1,6 @@
 import ExampleComponent from "./components/ExampleComponent.vue";
 import UserListComponent from "./components/UserListComponent.vue";
+import UserListDetailComponent from "./components/UserListDetailComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -12,6 +13,12 @@ const routes = [
         path: "/home/user-list",
         component: UserListComponent,
         name: "userList",
+    },
+    {
+        path: "/home/user-list/:id",
+        component: UserListDetailComponent,
+        name: "userListDetail",
+        props: true,
     },
 ];
 

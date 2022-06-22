@@ -29,11 +29,15 @@
 
 <script>
 import { onMounted, ref } from 'vue';
+import UserList from './UserListDetailComponent.vue';
 export default {
+  components: {
+    UserList
+  },
   setup() {
     const userList = ref("")
     const getUserList = () => {
-      axios.post('/userList').then(response => userList.value = response.data)
+      axios.get('/userList').then(response => userList.value = response.data)
     }
     onMounted(() => {
       getUserList()
@@ -41,8 +45,7 @@ export default {
     return {
       userList,
     }
-  },
-  methods: {},
+  }
 };
 </script>
 <style scoped>
