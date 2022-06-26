@@ -9,15 +9,15 @@
             </div>
             <div class="d-flex">
               <div>
-                <h2>1234</h2>
+                <h2>mada</h2>
                 <p>Tweets</p>
               </div>
               <div>
-                <h2>1234</h2>
+                <h2>{{ numFollowing }}</h2>
                 <p>Following</p>
               </div>
               <div>
-                <h2>1234</h2>
+                <h2>{{ numFollowed }}</h2>
                 <p>Followed</p>
               </div>
             </div>
@@ -45,15 +45,27 @@ export default {
   setup(props) {
     const show = ref("")
     const id = ref(props.id)
+    const numFollowing = ref(0)
+    const numFollowed = ref(0)
     const getUserList = () => {
       axios.get('/userProfile/' + props.id).then(response => show.value = response.data)
     }
+    const getFollowing = () => {
+      axios.get('/userProfile/' + props.id + '/following').then(response => numFollowing.value = response.data)
+    }
+    const getFollowed = () => {
+      axios.get('/userProfile/' + props.id + '/followed').then(response => numFollowed.value = response.data)
+    }
     onMounted(() => {
-      getUserList()
+      getUserList(),
+      getFollowing(),
+      getFollowed()
     })
     return {
       show,
-      id
+      id,
+      numFollowed,
+      numFollowing
     }
   },
 };

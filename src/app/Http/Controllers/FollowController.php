@@ -21,10 +21,20 @@ class FollowController extends Controller
         $this->middleware('auth');
     }
 
-    //フォローをチェックする
+    // ログインユーザーがフォローしている人を取得する
     public function followList()
     {
         return Follow::all()->where('followingId', Auth::user()["id"]);
+    }
+
+    public function getNumFollowing($id)
+    {
+        return Follow::where('followingId', $id)->count();
+    }
+
+    public function getNumFollowed($id)
+    {
+        return Follow::where('followedId', $id)->count();
     }
 
     //フォローする

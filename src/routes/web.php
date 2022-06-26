@@ -22,6 +22,8 @@ Route::get('/loginUser', [UserController::class, 'loginUser']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/userList', [UserController::class, 'userList']);
 Route::get('/userProfile/{id}', [UserController::class, 'show']);
+Route::get('/userProfile/{id}/following', [FollowController::class, 'getNumFollowing']);
+Route::get('/userProfile/{id}/followed', [FollowController::class, 'getNumFollowed']);
 Route::get('/users/followList', [FollowController::class, 'followList']);
 Route::post('/users/{id}/follow', [FollowController::class, 'follow']);
 Route::post('/users/{id}/unfollow', [FollowController::class, 'unfollow']);

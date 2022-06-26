@@ -49,10 +49,4 @@ class UserController extends Controller
     {
         return $id;
     }
-
-    public function followCheck($id)
-    {
-        $check_user = Auth::user();
-        return $check_user->isFollowing($id);
-    }
 }
