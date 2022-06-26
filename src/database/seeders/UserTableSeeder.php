@@ -17,7 +17,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
             User::create([
                 'name'  => 'test_user' . $i,
                 'screenName' => 'TEST' . $i,

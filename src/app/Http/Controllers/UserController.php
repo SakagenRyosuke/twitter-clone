@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use App\models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,5 +48,11 @@ class UserController extends Controller
     public function show(User $id)
     {
         return $id;
+    }
+
+    public function followCheck($id)
+    {
+        $check_user = Auth::user();
+        return $check_user->isFollowing($id);
     }
 }
