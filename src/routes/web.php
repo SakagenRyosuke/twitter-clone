@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FollowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,9 @@ Route::get('/loginUser', [UserController::class, 'loginUser']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/userList', [UserController::class, 'userList']);
 Route::get('/userList/{id}', [UserController::class, 'show']);
+Route::get('/users/followList', [FollowController::class, 'followList']);
+Route::post('/users/{id}/follow', [FollowController::class, 'follow']);
+Route::post('/users/{id}/unfollow', [FollowController::class, 'unfollow']);
 
 Route::group(['middleware' => 'auth'], function () {
   Route::get('/', function () {
