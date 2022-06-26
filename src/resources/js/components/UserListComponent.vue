@@ -18,7 +18,9 @@
                   </div>
                 </div>
               </router-link>
-              <button>Follow</button>
+              <div class="button">
+                <Button :id="user.id"></Button>
+              </div>
             </li>
           </ul>
         </div>
@@ -29,15 +31,20 @@
 
 <script>
 import { onMounted, ref } from 'vue';
+import Button from './ButtonComponent.vue';
 export default {
+  components: {
+    Button
+  },
   setup() {
     const userList = ref("")
     const getUserList = () => {
       axios.get('/userList').then(response => userList.value = response.data)
     }
-    onMounted(() => {
-      getUserList()
-    })
+    // onMounted(() => {
+    //   getUserList()
+    // })
+    getUserList();
     return {
       userList,
     }
@@ -55,24 +62,11 @@ a {
   text-decoration: none;
 }
 
-button {
-  cursor: pointer;
+.button {
   position: absolute;
   left: 90%;
   top: 50%;
   transform: translate(-50%, -50%);
-  padding: 2px 10px;
-  border-radius: 15px;
-  background-color: #fff;
-  border: 1px #333 solid;
-  font-size: 12px;
-  color: #333;
-  transition: all .3s;
-}
-
-button:hover {
-  border: 1px #0d6efd solid;
-  color: #0d6efd;
 }
 
 li:hover {

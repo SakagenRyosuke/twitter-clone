@@ -26,9 +26,7 @@
             <h1>{{ show.screenName }}</h1>
             <p>{{ show.name }}</p>
           </div>
-          <div class="d-flex">
-            <button>Follow</button>
-          </div>
+          <Button :id="id"></Button>
         </div>
       </div>
     </div>
@@ -36,12 +34,17 @@
 </template>
 <script>
 import { onMounted, ref } from 'vue';
+import Button from './ButtonComponent.vue';
 export default {
+  components: {
+    Button
+  },
   props: {
     id: String
   },
   setup(props) {
     const show = ref("")
+    const id = ref(props.id)
     const getUserList = () => {
       axios.get('/userList/' + props.id).then(response => show.value = response.data)
     }
@@ -49,7 +52,8 @@ export default {
       getUserList()
     })
     return {
-      show
+      show,
+      id
     }
   },
 };
