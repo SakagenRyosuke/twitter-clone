@@ -25,6 +25,14 @@
             User List
           </router-link>
         </li>
+        <li class="nav-item">
+          <router-link to="/home/create-tweet" class="nav-link link-dark" :class="{ 'active': $route.path === '/home/create-tweet' }">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#home"></use>
+            </svg>
+            Create Tweet
+          </router-link>
+        </li>
       </ul>
       <hr>
       <div class="dropdown">
@@ -36,7 +44,7 @@
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
           <li><a class="dropdown-item" href="#">New project...</a></li>
           <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <router-link to="/home/profile"><li><a class="dropdown-item">Profile</a></li></router-link>
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -85,5 +93,8 @@ export default {
   .nav-content {
     width: 280px;
     height: 100vh;
+  }
+  a {
+    text-decoration: none;
   }
 </style>
