@@ -39,12 +39,13 @@ export default {
   setup() {
     const userList = ref("")
     const getUserList = () => {
-      axios.get('/userList').then(response => userList.value = response.data)
+      axios.get('/userList').then(response => {
+        userList.value = response.data;
+      })
     }
-    // onMounted(() => {
-    //   getUserList()
-    // })
-    getUserList();
+    onMounted(() => {
+      getUserList()
+    })
     return {
       userList,
     }
