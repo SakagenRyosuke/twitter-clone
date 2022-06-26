@@ -44,7 +44,7 @@
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
           <li><a class="dropdown-item" href="#">New project...</a></li>
           <li><a class="dropdown-item" href="#">Settings</a></li>
-          <router-link to="/home/profile"><li><a class="dropdown-item">Profile</a></li></router-link>
+          <router-link :to="'/home/user-profile/' + user.id"><li><a class="dropdown-item">Profile</a></li></router-link>
           <li>
             <hr class="dropdown-divider">
           </li>

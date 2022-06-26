@@ -21,7 +21,7 @@ Auth::routes();
 Route::get('/loginUser', [UserController::class, 'loginUser']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/userList', [UserController::class, 'userList']);
-Route::get('/userList/{id}', [UserController::class, 'show']);
+Route::get('/userProfile/{id}', [UserController::class, 'show']);
 Route::get('/users/followList', [FollowController::class, 'followList']);
 Route::post('/users/{id}/follow', [FollowController::class, 'follow']);
 Route::post('/users/{id}/unfollow', [FollowController::class, 'unfollow']);

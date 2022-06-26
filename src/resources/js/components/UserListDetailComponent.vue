@@ -46,7 +46,7 @@ export default {
     const show = ref("")
     const id = ref(props.id)
     const getUserList = () => {
-      axios.get('/userList/' + props.id).then(response => show.value = response.data)
+      axios.get('/userProfile/' + props.id).then(response => show.value = response.data)
     }
     onMounted(() => {
       getUserList()
