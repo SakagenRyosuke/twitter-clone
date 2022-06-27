@@ -1,29 +1,23 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="container col-md-12">
-        <div class="my-3 py-3 bg-body rounded shadow-sm">
-          <h6 class="border-bottom px-3 pb-2 mb-0">userList</h6>
-          <ul class="ps-0">
-            <li class="px-3" v-for="user in userList">
-              <router-link :to="'/home/user-profile/' + user.id">
-                <div class="d-flex text-muted pt-3">
-                  <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
-                    :src="user.profileImage" alt="">
-                  <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                    <div class="d-flex justify-content-between">
-                      <strong class="text-gray-dark">{{ user.name }}</strong>
-                    </div>
-                    <span class="d-block">{{ user.screenName }}</span>
-                  </div>
+      <div class="container col-md-12 mt-5">
+        <ul class="ps-0">
+          <li class="card" v-for="user in userList">
+            <router-link :to="'/home/user-profile/' + user.id">
+              <div class="card-haeder p-3 w-100 d-flex">
+                <img class="rounded-circle" width="50" height="50" :src="user.profileImage" alt="">
+                <div class="ms-2 d-flex flex-column">
+                  <p class="mb-0">{{ user.name }}</p>
+                  <p class="text-secondary">{{ user.screenName }}</p>
                 </div>
-              </router-link>
-              <div class="button">
-                <Button :id="user.id"></Button>
               </div>
-            </li>
-          </ul>
-        </div>
+            </router-link>
+            <div class="button">
+              <Button :id="user.id"></Button>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -61,6 +55,10 @@ li {
 
 a {
   text-decoration: none;
+}
+
+p {
+  color: #333;
 }
 
 .button {
