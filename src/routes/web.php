@@ -19,8 +19,9 @@ use App\Http\Controllers\FollowController;
 Auth::routes();
 
 Route::get('/loginUser', [UserController::class, 'loginUser']);
+Route::get('/maxPage', [UserController::class, 'maxPage']);
 Route::post('/logout', [UserController::class, 'logout']);
-Route::get('/userList', [UserController::class, 'userList']);
+Route::get('/userList/{page}', [UserController::class, 'userList']);
 Route::get('/userProfile/{id}', [UserController::class, 'show']);
 Route::get('/userProfile/{id}/following', [FollowController::class, 'getNumFollowing']);
 Route::get('/userProfile/{id}/followed', [FollowController::class, 'getNumFollowed']);

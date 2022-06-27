@@ -23,12 +23,21 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function userList()
+    public function userList($page)
     {
-        $allUser = User::all();
+        // 10件ごとに取得
+        $count = 10 * $page;
+        $allUser = User::all()->whereBetween('id', [1, $count]);
         $loginUser = Auth::user();
         unset($allUser[$loginUser["id"] - 1]);
         return $allUser;
+    }
+
+    public function maxPage()
+    {
+        $showNum = 10;
+        $maxCount = User::all()->count();
+        return $maxCount % $showNum == 0 ? $maxCount / $showNum : $maxCount / $showNum + 1;
     }
 
     public function loginUser()

@@ -13,10 +13,13 @@
                 </div>
               </div>
             </router-link>
-            <div class="button">
-              <Button :id="user.id"></Button>
+            <div class="followButton">
+              <FollowButton :id="user.id"></FollowButton>
             </div>
           </li>
+          <div class="mt-4 d-flex justify-content-center">
+            <button :class="[is_showMore ? 'is_showMore' : '']" @click="is_addUserList">{{ text }}</button>
+          </div>
         </ul>
       </div>
     </div>
@@ -25,23 +28,53 @@
 
 <script>
 import { onMounted, ref } from 'vue';
-import Button from './ButtonComponent.vue';
+import FollowButton from './FollowButtonComponent.vue';
 export default {
   components: {
-    Button
+    FollowButton
   },
   setup() {
+    const moreButton = ref("Show More")
     const userList = ref("")
-    const getUserList = () => {
-      axios.get('/userList').then(response => {
-        userList.value = response.data;
+    const is_showMore = ref(true);
+    const page = ref(0);
+    const maxPage = ref(0);
+    const text = ref("Show More");
+    const getMaxPage = () => {
+      axios.get('/maxPage').then(response => {
+        maxPage.value = response.data;
       })
     }
+    const getUserList = () => {
+      axios.get('/userList/' + (page.value + 1)).then(response => {
+        userList.value = response.data;
+        page.value++;
+      })
+    }
+    const addUserList = () => {
+      axios.get('/userList/' + (page.value + 1)).then(response => {
+        userList.value = response.data
+        page.value++;
+      })
+    }
+    const is_addUserList = () => {
+      if (maxPage.value == page.value) {
+        is_showMore.value = false;
+        text.value = "No More";
+      } else {
+        addUserList()
+      }
+    }
     onMounted(() => {
-      getUserList()
+      getUserList(),
+        getMaxPage()
     })
     return {
       userList,
+      moreButton,
+      is_showMore,
+      text,
+      is_addUserList
     }
   }
 };
@@ -61,7 +94,7 @@ p {
   color: #333;
 }
 
-.button {
+.followButton {
   position: absolute;
   left: 90%;
   top: 50%;
@@ -71,4 +104,32 @@ p {
 li:hover {
   background-color: rgba(245, 245, 245, 0.8) !important;
 }
+
+.showMoreButton {
+  margin-top: 30px;
+}
+
+button {
+  cursor: default;
+  padding: 4px 12px;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #333;
+  border: none;
+  background-color: #f8f9fa;
+}
+
+.is_showMore {
+  cursor: pointer;
+  background-color: #0d6efd;
+  border: 1px #0d6efd solid;
+  color: #fff;
+  transition: all .3s;
+}
+
+.is_showMore:hover {
+  opacity: .85;
+  color: #fff;
+}
 </style>
+
