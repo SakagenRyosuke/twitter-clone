@@ -92,7 +92,7 @@ export default {
 <style scoped>
   .nav-content {
     width: 280px;
-    height: 100vh;
+    height: 100%;
   }
   a {
     text-decoration: none;
