@@ -26,7 +26,7 @@
             <h1>{{ show.screenName }}</h1>
             <p>{{ show.name }}</p>
           </div>
-          <Button :id="id"></Button>
+          <FollowButton :id="id"></FollowButton>
         </div>
       </div>
     </div>
@@ -34,10 +34,10 @@
 </template>
 <script>
 import { onMounted, ref } from 'vue';
-import Button from './ButtonComponent.vue';
+import FollowButton from './FollowButtonComponent.vue';
 export default {
   components: {
-    Button
+    FollowButton
   },
   props: {
     id: String
