@@ -34,7 +34,6 @@ export default {
     FollowButton
   },
   setup() {
-    const moreButton = ref("Show More")
     const userList = ref("")
     const is_showMore = ref(true);
     const page = ref(0);
@@ -71,7 +70,6 @@ export default {
     })
     return {
       userList,
-      moreButton,
       is_showMore,
       text,
       is_addUserList
