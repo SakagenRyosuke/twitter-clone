@@ -1,11 +1,11 @@
 <template>
-  <div class="fixed-top">
+  <div class="fixed-top nav-content">
     <div class="d-flex flex-column p-3 bg-light nav-content">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
           <use xlink:href="#bootstrap"></use>
         </svg>
-        <span class="fs-4">title</span>
+        <span class="fs-4">Twitter Clone</span>
       </a>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
@@ -15,6 +15,22 @@
               <use xlink:href="#home"></use>
             </svg>
             Home
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/home/user-list" class="nav-link link-dark" :class="{ 'active': $route.path === '/home/user-list' }">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#home"></use>
+            </svg>
+            User List
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/home/create-tweet" class="nav-link link-dark" :class="{ 'active': $route.path === '/home/create-tweet' }">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#home"></use>
+            </svg>
+            Create Tweet
           </router-link>
         </li>
       </ul>
@@ -28,7 +44,7 @@
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
           <li><a class="dropdown-item" href="#">New project...</a></li>
           <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <router-link :to="'/home/user-profile/' + user.id"><li><a class="dropdown-item">Profile</a></li></router-link>
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -76,6 +92,9 @@ export default {
 <style scoped>
   .nav-content {
     width: 280px;
-    height: 100vh;
+    height: 100%;
+  }
+  a {
+    text-decoration: none;
   }
 </style>

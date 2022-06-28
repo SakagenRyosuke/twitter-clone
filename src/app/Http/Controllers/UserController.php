@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use App\models\User;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    private const SHOW_NUMBER = 10;
+
     /**
      * Create a new controller instance.
      *
@@ -21,20 +21,46 @@ class UserController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をobjectで返す
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return object
      */
-    public function userList()
+    public function getUserList($page)
     {
-        return User::all();
+        $count = self::SHOW_NUMBER * $page;
+        $allUser = User::all()->whereBetween('id', [1, $count]);
+        $loginUser = Auth::user();
+        unset($allUser[$loginUser["id"] - 1]);
+        return $allUser;
     }
 
-    public function loginUser()
+    /**
+     * getUserListで引数にしているページが最大何ページまで対応できるのか、その値を返す
+     * 
+     * @return integer
+     */
+    public function getMaxPage()
+    {
+        $showNum = self::SHOW_NUMBER;
+        $maxCount = User::all()->count();
+        return $maxCount % $showNum == 0 ? $maxCount / $showNum : $maxCount / $showNum + 1;
+    }
+
+    /**
+     * ログインユーザーの情報を返す
+     * 
+     * @return object
+     */
+    public function getLoginUser()
     {
         return Auth::user();
     }
 
+    /**
+     * ログアウトする
+     * 
+     * @return void
+     */
     public function logout(Request $request)
     {
         Auth::logout();
@@ -44,10 +70,13 @@ class UserController extends Controller
         $request->session()->regenerateToken();
     }
 
-    public function show($id)
+    /**
+     * 引数と一致するidのユーザー情報を取得してその値を返す
+     * 
+     * @return object
+     */
+    public function show(User $user)
     {
-        $user = User::find($id);
-
-        return view('user.show', compact('user'));
+        return $user;
     }
 }
