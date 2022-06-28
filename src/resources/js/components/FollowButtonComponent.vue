@@ -15,26 +15,39 @@ export default {
     const is_follow = ref(false)
     const text = ref("Follow")
     const isFollow = () => {
-      // ログインユーザーのフォローリストを取得してpropsで受け取ったIDが入っているかどうかでフォローしているか
+      // ログインユーザーのフォローリストを取得してpropsで受け取ったIDが入っているかでフォロースタイルにする
       axios.get('/users/followList').then(response => {
         response.data.forEach(object => {
-          if (object.followedId == props.id) {
+          if (object.followedId === props.id) {
             is_follow.value = true;
             text.value = "Following";
           }
         })
       });
     }
-    function follow() {
-      axios.post('/users/' + props.id + '/follow');
+    async function follow() {
+      try {
+        await axios.post('/users/' + props.id + '/follow');
+      } catch (error) {
+        alert("エラーが発生しました。")
+      }
     }
-    function unfollow() {
-      axios.post('/users/' + props.id + '/unfollow');
+    async function unfollow() {
+      try {
+        await axios.post('/users/' + props.id + '/unfollow');
+      } catch (error) {
+        alert("エラーが発生しました。")
+      }
     }
     const doFollow = () => {
       is_follow.value = !is_follow.value;
-      text.value = is_follow.value === true ? "Following" : "Follow";
-      is_follow.value === true ? follow() : unfollow();
+      if (is_follow.value === true) {
+        text.value = "Following";
+        follow()
+      } else {
+        text.value = "Follow";
+        unfollow();
+      }
     }
     onMounted(() => {
       isFollow()
