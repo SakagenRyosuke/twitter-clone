@@ -17,23 +17,45 @@ class FollowController extends Controller
         $this->middleware('auth');
     }
 
-    // ログインユーザーがフォローしている人を取得する
-    public function followList()
+    /**
+     * ログインユーザーがフォローしている人を取得する
+     * 
+     * followingIdがログインIdであるレコードをfollowsテーブルから取得してその値を返す
+     * 
+     * @return object
+     */
+    public function getFollowList()
     {
-        return Follow::all()->where('followingId', Auth::user()["id"]);
+        return Follow::all()->where('followingId', Auth::id());
     }
 
-    public function getNumFollowing($id)
+    /**
+     * idが引数と一致する人のフォローしている人数を取得してその値を返す
+     * 
+     * @return integer
+     */
+    public function getFollowingCount($id)
     {
         return Follow::where('followingId', $id)->count();
     }
 
-    public function getNumFollowed($id)
+    /**
+     * idが引数と一致する人のフォローされている人数を取得してその値を返す
+     * 
+     * @return integer
+     */
+    public function getFollowedCount($id)
     {
         return Follow::where('followedId', $id)->count();
     }
 
-    //フォローする
+    /**
+     * フォローする
+     * 
+     * レコードを作成しfollowsテーブルに追加する
+     * 
+     * @return void
+     */
     public function follow($id)
     {
         Follow::firstOrCreate([
@@ -41,7 +63,14 @@ class FollowController extends Controller
             'followingId' => Auth::id(),
         ]);
     }
-    //フォロー解除する
+
+    /**
+     * フォロー解除する
+     * 
+     * followsテーブルに検索をかけて、一致したものがあった場合レコードをデリートする
+     * 
+     * @return void
+     */
     public function unfollow($id)
     {
         $follow = Follow::where('followedId', $id)
