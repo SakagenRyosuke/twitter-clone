@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\models\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    private const SHOW_NUMBER = 10;
+
     /**
      * Create a new controller instance.
      *
@@ -19,32 +21,46 @@ class UserController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をobjectで返す
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return object
      */
-    public function userList($page)
+    public function getUserList($page)
     {
-        // 10件ごとに取得
-        $count = 10 * $page;
+        $count = self::SHOW_NUMBER * $page;
         $allUser = User::all()->whereBetween('id', [1, $count]);
         $loginUser = Auth::user();
         unset($allUser[$loginUser["id"] - 1]);
         return $allUser;
     }
 
-    public function maxPage()
+    /**
+     * getUserListで引数にしているページが最大何ページまで対応できるのか、その値を返す
+     * 
+     * @return integer
+     */
+    public function getMaxPage()
     {
-        $showNum = 10;
+        $showNum = self::SHOW_NUMBER;
         $maxCount = User::all()->count();
         return $maxCount % $showNum == 0 ? $maxCount / $showNum : $maxCount / $showNum + 1;
     }
 
-    public function loginUser()
+    /**
+     * ログインユーザーの情報を返す
+     * 
+     * @return object
+     */
+    public function getLoginUser()
     {
         return Auth::user();
     }
 
+    /**
+     * ログアウトする
+     * 
+     * @return void
+     */
     public function logout(Request $request)
     {
         Auth::logout();
@@ -54,6 +70,11 @@ class UserController extends Controller
         $request->session()->regenerateToken();
     }
 
+    /**
+     * 引数と一致するidのユーザー情報を取得してその値を返す
+     * 
+     * @return object
+     */
     public function show(User $id)
     {
         return $id;
