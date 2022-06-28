@@ -75,8 +75,8 @@ class UserController extends Controller
      * 
      * @return object
      */
-    public function show(User $id)
+    public function show(User $user)
     {
-        return $id;
+        return $user;
     }
 }
