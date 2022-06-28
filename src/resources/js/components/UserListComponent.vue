@@ -17,7 +17,7 @@
               <FollowButton :id="user.id"></FollowButton>
             </div>
           </li>
-          <div class="mt-4 d-flex justify-content-center">
+          <div class="mt-4 mb-5 d-flex justify-content-center">
             <button :class="[is_showMore ? 'is_showMore' : '']" @click="is_addUserList">{{ text }}</button>
           </div>
         </ul>
@@ -34,7 +34,7 @@ export default {
     FollowButton
   },
   setup() {
-    const userList = ref("")
+    const userList = ref();
     const is_showMore = ref(true);
     const page = ref(0);
     const maxPage = ref(0);
@@ -57,7 +57,7 @@ export default {
       })
     }
     const is_addUserList = () => {
-      if (maxPage.value == page.value) {
+      if (maxPage.value === page.value) {
         is_showMore.value = false;
         text.value = "No More";
       } else {
