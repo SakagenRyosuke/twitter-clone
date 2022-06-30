@@ -59,10 +59,15 @@ Route::group(['middleware' => 'auth'], function () {
    */
   Route::get('/userList/{page}', [UserController::class, 'getUserList']);
   /**
+   * 引数のidとログインユーザーのidが一致するかどうかをブール値で取得
+   * UserListDetailComponent
+   */
+  Route::get('/isLoginUser/{user}', [UserController::class, 'isLoginUser']);
+  /**
    * idと一致するユーザーの取得
    * UserListDetailComponent
    */
-  Route::get('/userProfile/{id}', [UserController::class, 'show']);
+  Route::get('/userProfile/{user}', [UserController::class, 'show']);
   /**
    * idと一致するユーザーのフォローしている人数の取得
    * UserListDetailComponent
