@@ -18,7 +18,7 @@
             </div>
           </li>
           <div class="mt-4 mb-5 d-flex justify-content-center">
-            <button :class="[is_showMore ? 'is_showMore' : '']" @click="is_addUserList">{{ text }}</button>
+            <button :class="[is_showMore ? 'is_showMore' : '']" @click="getData">{{ text }}</button>
           </div>
         </ul>
       </div>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import FollowButton from './FollowButtonComponent.vue';
 export default {
@@ -34,45 +35,30 @@ export default {
     FollowButton
   },
   setup() {
-    const userList = ref();
+    const userList = ref([]);
     const is_showMore = ref(true);
     const page = ref(0);
-    const maxPage = ref(0);
     const text = ref("Show More");
-    const getMaxPage = () => {
-      axios.get('/maxPage').then(response => {
-        maxPage.value = response.data;
-      })
-    }
-    const getUserList = () => {
-      axios.get('/userList/' + (page.value + 1)).then(response => {
-        userList.value = response.data;
-        page.value++;
-      })
-    }
-    const addUserList = () => {
-      axios.get('/userList/' + (page.value + 1)).then(response => {
-        userList.value = response.data
-        page.value++;
-      })
-    }
-    const is_addUserList = () => {
-      if (maxPage.value === page.value) {
+
+    const getData = async () => {
+      const getData = await axios.get(`/index/${++page.value}`);
+      if (getData.data.users.length > 0) {
+        for (const element of getData.data.users) {
+          userList.value.push(element);
+        }
+      } else {
         is_showMore.value = false;
         text.value = "No More";
-      } else {
-        addUserList()
       }
     }
     onMounted(() => {
-      getUserList(),
-        getMaxPage()
+      getData()
     })
     return {
       userList,
       is_showMore,
       text,
-      is_addUserList
+      getData
     }
   }
 };

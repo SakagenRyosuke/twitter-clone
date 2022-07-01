@@ -49,15 +49,10 @@ Route::group(['middleware' => 'auth'], function () {
    */
   Route::post('/logout', [UserController::class, 'logout']);
   /**
-   * 最大ページ数の取得
-   * UserListComponent
-   */
-  Route::get('/maxPage', [UserController::class, 'getMaxPage']);
-  /**
    * ユーザー一覧の取得
    * UserListComponent
    */
-  Route::get('/userList/{page}', [UserController::class, 'getUserList']);
+  Route::get('/index/{page}', [UserController::class, 'index']);
   /**
    * 引数のidとログインユーザーのidが一致するかどうかをブール値で取得
    * UserListDetailComponent
@@ -69,20 +64,10 @@ Route::group(['middleware' => 'auth'], function () {
    */
   Route::get('/userProfile/{user}', [UserController::class, 'show']);
   /**
-   * idと一致するユーザーのフォローしている人数の取得
-   * UserListDetailComponent
-   */
-  Route::get('/userProfile/{id}/followingCount', [FollowController::class, 'getFollowingCount']);
-  /**
-   * idと一致するユーザーのフォローされている人数の取得
-   * UserListDetailComponent
-   */
-  Route::get('/userProfile/{id}/followedCount', [FollowController::class, 'getFollowedCount']);
-  /**
    * ログインユーザーのフォローリストの取得
    * FollowButtonComponent
    */
-  Route::get('/users/followList', [FollowController::class, 'getFollowList']);
+  Route::get('/users/followList/{id}', [FollowController::class, 'getFollowList']);
   /**
    * フォローの実行
    * FollowButtonComponent

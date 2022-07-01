@@ -8,22 +8,19 @@
 import { onMounted, ref } from 'vue';
 export default {
   props: {
-    id: null
+    id: Number
   },
   setup(props) {
-    const followList = ref("")
+    const followList = ref()
     const is_follow = ref(false)
     const text = ref("Follow")
-    const isFollow = () => {
+    const isFollow = async() => {
       // ログインユーザーのフォローリストを取得してpropsで受け取ったIDが入っているかでフォロースタイルにする
-      axios.get('/users/followList').then(response => {
-        response.data.forEach(object => {
-          if (object.followedId === props.id) {
-            is_follow.value = true;
-            text.value = "Following";
-          }
-        })
-      });
+      const isFollow = await axios.get('/users/followList/' + props.id);
+      if (isFollow.data === 1) {
+        is_follow.value = true;
+        text.value = "Following";
+      }
     }
     async function follow() {
       try {

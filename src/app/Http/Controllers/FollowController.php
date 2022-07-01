@@ -24,29 +24,9 @@ class FollowController extends Controller
      * 
      * @return object
      */
-    public function getFollowList()
+    public function getFollowList(int $id,Follow $follow): int
     {
-        return Follow::all()->where('followingId', Auth::id());
-    }
-
-    /**
-     * idが引数と一致する人のフォローしている人数を取得してその値を返す
-     * 
-     * @return integer
-     */
-    public function getFollowingCount($id)
-    {
-        return Follow::where('followingId', $id)->count();
-    }
-
-    /**
-     * idが引数と一致する人のフォローされている人数を取得してその値を返す
-     * 
-     * @return integer
-     */
-    public function getFollowedCount($id)
-    {
-        return Follow::where('followedId', $id)->count();
+        return $follow->getFollowList($id,Auth::id());
     }
 
     /**
@@ -56,12 +36,9 @@ class FollowController extends Controller
      * 
      * @return void
      */
-    public function follow($id)
+    public function follow(int $id, Follow $follow)
     {
-        Follow::firstOrCreate([
-            'followedId' => $id,
-            'followingId' => Auth::id(),
-        ]);
+        $follow->doFollow($id, Auth::id());
     }
 
     /**
@@ -71,13 +48,8 @@ class FollowController extends Controller
      * 
      * @return void
      */
-    public function unfollow($id)
+    public function unfollow(int $id, Follow $follow)
     {
-        $follow = Follow::where('followedId', $id)
-            ->where('followingId', Auth::id())
-            ->first();
-        if ($follow) {
-            $follow->delete();
-        }
+        $follow->doUnfollow($id, Auth::id());
     }
 }

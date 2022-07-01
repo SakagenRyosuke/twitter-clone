@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    private const SHOW_NUMBER = 10;
 
     /**
      * The attributes that are mass assignable.
@@ -42,4 +43,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をobjectで返す
+     *
+     * @return object
+     */
+    public function getUserList(int $page, int $authUserId): object
+    {
+        $count = self::SHOW_NUMBER * $page;
+        $start = $count - self::SHOW_NUMBER + 1;
+        $allUser = $this->where('id', '<>', $authUserId)->select("id", "name", "screenName", "profileImage")->whereBetween('id', [$start, $count])->get();
+        return $allUser;
+    }
 }

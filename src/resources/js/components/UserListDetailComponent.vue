@@ -2,10 +2,10 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="container col-md-12">
-        <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <div class="my-3 p-3 bg-body rounded shadow-sm" v-show="user">
           <div class="d-flex mb-3">
             <div class="img me-5">
-              <img class="rounded-circle w-100 h-100" :src="show.profileImage" alt="profileImage">
+              <img class="rounded-circle w-100 h-100" v-if="user" :src="user.profileImage" alt="profileImage">
             </div>
             <div class="d-flex align-items-end">
               <div class="me-3 px-3 text-center">
@@ -13,18 +13,18 @@
                 <p>Tweets</p>
               </div>
               <div class="me-3 px-3 text-center">
-                <h2 class="fs-4">{{ followingCount }}</h2>
+                <h2 class="fs-4" v-if="user">{{ followingCount }}</h2>
                 <p>Following</p>
               </div>
               <div class="me-3 px-3 text-center">
-                <h2 class="fs-4">{{ followedCount }}</h2>
+                <h2 class="fs-4" v-if="user">{{ followedCount }}</h2>
                 <p>Followed</p>
               </div>
             </div>
           </div>
           <div class="name mb-3">
-            <h1 class="p-0 m-0 fs-2 text-center">{{ show.screenName }}</h1>
-            <p class="p-0 m-0 text-center">{{ show.name }}</p>
+            <h1 class="p-0 m-0 fs-2 text-center" v-if="user">{{ user.screenName }}</h1>
+            <p class="p-0 m-0 text-center" v-if="user">{{ user.name }}</p>
           </div>
           <FollowButton v-show="isLoginUser === 0" :id="id"></FollowButton>
           <EditButton v-show="isLoginUser === 1"></EditButton>
@@ -48,31 +48,23 @@ export default {
     id: String
   },
   setup(props) {
-    const show = ref({})
+    const user = ref()
     const isLoginUser = ref(0)
     const id = ref(Number(props.id))
     const followingCount = ref(0)
     const followedCount = ref(0)
-    const selectButton = () => {
-      axios.get('/isLoginUser/' + props.id).then(response => isLoginUser.value = response.data)
-    }
-    const getUserList = () => {
-      axios.get('/userProfile/' + props.id).then(response => show.value = response.data)
-    }
-    const getFollowingCount = () => {
-      axios.get('/userProfile/' + props.id + '/followingCount').then(response => followingCount.value = response.data)
-    }
-    const getFollowedCount = () => {
-      axios.get('/userProfile/' + props.id + '/followedCount').then(response => followedCount.value = response.data)
+    const getData = async () => {
+      const getData = await axios.get(`/userProfile/${props.id}`);
+      user.value = getData.data.user;
+      isLoginUser.value = getData.data.isAuthUser;
+      followingCount.value = getData.data.followingCount;
+      followedCount.value = getData.data.followedCount;
     }
     onMounted(() => {
-      selectButton(),
-      getUserList(),
-      getFollowingCount(),
-      getFollowedCount()
+      getData()
     })
     return {
-      show,
+      user,
       id,
       followedCount,
       followingCount,
@@ -86,6 +78,7 @@ export default {
   width: 100px;
   height: 100px;
 }
+
 .name {
   width: 100px;
 }
