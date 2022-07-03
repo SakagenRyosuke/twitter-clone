@@ -21,7 +21,6 @@ class Tweet extends Model
     {
         $count = self::SHOW_NUMBER * $page;
         $start = $count - self::SHOW_NUMBER + 1;
-        // dd($this->where('userId', $id)->orderBy('created_at', 'desc')->select("text","created_at")->whereBetween('userId', [$start, $count])->get());
         return $this->where('userId', $id)->orderBy('created_at', 'desc')->select("id", "text", "created_at")->whereBetween('userId', [$start, $count])->get();
     }
 
@@ -32,7 +31,6 @@ class Tweet extends Model
      */
     public function getTweetCount(int $id): int
     {
-        // dd($this->where('userId', $id)->count());
         return $this->where('userId', $id)->count();
     }
 }
