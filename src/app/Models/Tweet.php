@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Consts\AdditionalNumber;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +11,6 @@ class Tweet extends Model
     use HasFactory;
 
     protected $fillable = ['text'];
-    private const SHOW_NUMBER = 10;
 
     /**
      * 引数のユーザーのtweet一覧を投稿日順にソートしてその値を返す。
@@ -19,8 +19,8 @@ class Tweet extends Model
      */
     public function getTimeLine(int $id, int $page): object
     {
-        $count = self::SHOW_NUMBER * $page;
-        $start = $count - self::SHOW_NUMBER + 1;
+        $count = AdditionalNumber::SHOW_NUMBER * $page;
+        $start = $count - AdditionalNumber::SHOW_NUMBER + 1;
         return $this->where('userId', $id)->orderBy('created_at', 'desc')->select("id", "text", "created_at")->whereBetween('userId', [$start, $count])->get();
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Consts\AdditionalNumber;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,7 +11,6 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    private const SHOW_NUMBER = 10;
 
     /**
      * The attributes that are mass assignable.
@@ -51,8 +51,8 @@ class User extends Authenticatable
      */
     public function getUserList(int $page, int $authUserId): object
     {
-        $count = self::SHOW_NUMBER * $page;
-        $start = $count - self::SHOW_NUMBER + 1;
+        $count = AdditionalNumber::SHOW_NUMBER * $page;
+        $start = $count - AdditionalNumber::SHOW_NUMBER + 1;
         $allUser = $this->where('id', '<>', $authUserId)->select("id", "name", "screenName", "profileImage")->whereBetween('id', [$start, $count])->get();
         return $allUser;
     }
