@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <button :class="[is_follow ? 'is_follow' : '']" @click="doFollow">{{ text }}</button>
+    <button :class="[is_follow ? 'is_follow' : '',is_loading ? 'is_loading': '']" @click="doFollow">{{ text }}</button>
     <!-- -->
   </div>
 </template>
@@ -14,13 +14,15 @@ export default {
     const followList = ref()
     const is_follow = ref(false)
     const text = ref("Follow")
-    const isFollow = async() => {
+    const is_loading = ref(true);
+    const isFollow = async () => {
       // ログインユーザーのフォローリストを取得してpropsで受け取ったIDが入っているかでフォロースタイルにする
       const isFollow = await axios.get('/users/followList/' + props.id);
       if (isFollow.data === 1) {
         is_follow.value = true;
         text.value = "Following";
       }
+      is_loading.value = false;
     }
     async function follow() {
       try {
@@ -53,6 +55,7 @@ export default {
       is_follow,
       text,
       followList,
+      is_loading,
       doFollow
     }
   },
@@ -79,6 +82,10 @@ button:hover {
   background-color: #0d6efd;
   border: 1px #0d6efd solid;
   color: #fff;
+}
+
+.is_loading {
+  pointer-events: none;
 }
 
 .is_follow:hover {
