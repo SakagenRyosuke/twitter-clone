@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Follow;
+use App\Models\Tweet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -61,13 +62,14 @@ class UserController extends Controller
      * 
      * @return array<object, int>
      */
-    public function show(User $user,Follow $follow): array
+    public function show(User $user,Follow $follow, Tweet $tweet): array
     {
         return [
             "user" => $user,
             "followingCount" => $follow->getFollowingCount($user["id"]),
             "followedCount" => $follow->getFollowedCount($user["id"]),
-            "isAuthUser" => Auth::id() == $user["id"] ? 1 : 0
+            "isAuthUser" => Auth::id() == $user["id"] ? 1 : 0,
+            "tweetsCount" => $tweet->getTweetCount($user["id"])
         ];
     }
 

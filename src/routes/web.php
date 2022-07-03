@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\TweetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,11 @@ Route::group(['middleware' => 'auth'], function () {
    * UserListDetailComponent
    */
   Route::get('/userProfile/{user}', [UserController::class, 'show']);
+  /**
+   * idが引数と一致するユーザーのtweetを取得
+   * UserListDetailComponent
+   */
+  Route::get('/timeLine/{id}/{page}', [TweetController::class, 'index']);
   /**
    * ログインユーザーのフォローリストの取得
    * FollowButtonComponent
