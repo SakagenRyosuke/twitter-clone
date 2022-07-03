@@ -38,7 +38,7 @@ class FollowController extends Controller
      */
     public function follow(int $id, Follow $follow)
     {
-        $follow->doFollow($id, Auth::id());
+        $follow->doFollowing($id, Auth::id());
     }
 
     /**
@@ -50,6 +50,6 @@ class FollowController extends Controller
      */
     public function unfollow(int $id, Follow $follow)
     {
-        $follow->doUnfollow($id, Auth::id());
+        $follow->doUnfollowing($id, Auth::id());
     }
 }

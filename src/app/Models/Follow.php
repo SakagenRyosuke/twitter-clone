@@ -49,7 +49,7 @@ class Follow extends Model
      * 
      * @return void
      */
-    public function doFollow(int $id, int $authUserId)
+    public function doFollowing(int $id, int $authUserId)
     {
         $this->firstOrCreate([
             'followedId' => $id,
@@ -64,7 +64,7 @@ class Follow extends Model
      * 
      * @return void
      */
-    public function doUnfollow(int $id, int $authUserId)
+    public function doUnfollowing(int $id, int $authUserId)
     {
         $follow = $this->where('followedId', $id)
             ->where('followingId', $authUserId)
