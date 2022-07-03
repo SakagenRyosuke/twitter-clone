@@ -19,8 +19,8 @@ class Tweet extends Model
      */
     public function getTimeLine(int $id, int $page): object
     {
-        $count = AdditionalNumber::SHOW_NUMBER * $page;
-        $start = $count - AdditionalNumber::SHOW_NUMBER + 1;
+        $count = AdditionalNumber::SHOW_TWEETS_NUMBER * $page;
+        $start = $count - AdditionalNumber::SHOW_TWEETS_NUMBER + 1;
         return $this->where('userId', $id)->orderBy('created_at', 'desc')->select("id", "text", "created_at")->whereBetween('userId', [$start, $count])->get();
     }
 

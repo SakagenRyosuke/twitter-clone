@@ -51,8 +51,8 @@ class User extends Authenticatable
      */
     public function getUserList(int $page, int $authUserId): object
     {
-        $count = AdditionalNumber::SHOW_NUMBER * $page;
-        $start = $count - AdditionalNumber::SHOW_NUMBER + 1;
+        $count = AdditionalNumber::SHOW_USERS_NUMBER * $page;
+        $start = $count - AdditionalNumber::SHOW_USERS_NUMBER + 1;
         $allUser = $this->where('id', '<>', $authUserId)->select("id", "name", "screenName", "profileImage")->whereBetween('id', [$start, $count])->get();
         return $allUser;
     }
