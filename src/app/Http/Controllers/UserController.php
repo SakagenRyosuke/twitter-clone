@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Follow;
+use App\Models\Tweet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    private const SHOW_NUMBER = 10;
-
     /**
      * Create a new controller instance.
      *
@@ -21,29 +21,16 @@ class UserController extends Controller
     }
 
     /**
-     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をobjectで返す
+     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をarrayで返す
      *
-     * @return object
+     * @return array
      */
-    public function getUserList($page)
+    public function index(User $user): array
     {
-        $count = self::SHOW_NUMBER * $page;
-        $allUser = User::all()->whereBetween('id', [1, $count]);
-        $loginUser = Auth::user();
-        unset($allUser[$loginUser["id"] - 1]);
-        return $allUser;
-    }
-
-    /**
-     * getUserListで引数にしているページが最大何ページまで対応できるのか、その値を返す
-     * 
-     * @return integer
-     */
-    public function getMaxPage()
-    {
-        $showNum = self::SHOW_NUMBER;
-        $maxCount = User::all()->count();
-        return $maxCount % $showNum == 0 ? $maxCount / $showNum : $maxCount / $showNum + 1;
+        $users = $user->getUserList(Auth::id());
+        return [
+            "users" => $users
+        ];
     }
 
     /**
@@ -51,7 +38,7 @@ class UserController extends Controller
      * 
      * @return object
      */
-    public function getLoginUser()
+    public function getLoginUser(): object
     {
         return Auth::user();
     }
@@ -73,10 +60,33 @@ class UserController extends Controller
     /**
      * 引数と一致するidのユーザー情報を取得してその値を返す
      * 
-     * @return object
+     * @return array<object, int>
      */
-    public function show(User $user)
+    public function show(User $user, Follow $follow, Tweet $tweet): array
     {
-        return $user;
+        return [
+            "user" => $user,
+            "followingCount" => $follow->getFollowingCount($user["id"]),
+            "followedCount" => $follow->getFollowedCount($user["id"]),
+            "isAuthUser" => Auth::id() == $user["id"] ? 1 : 0,
+            "tweetsCount" => $tweet->getTweetCount($user["id"]),
+            "isFollow" => $follow->isFollow($user["id"], Auth::id())
+        ];
+    }
+
+    /**
+     * ログインユーザーかどうかを0,1で返す
+     * 
+     * @return int
+     */
+    public function isLoginUser(int $user): int
+    {
+        return  Auth::id() == $user ? true : false;
+    }
+
+    public function test()
+    {
+        $users = User::paginate(5);
+        return $users;
     }
 }

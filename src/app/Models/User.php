@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Consts\Paginate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -42,4 +43,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をobjectで返す
+     *
+     * @return object
+     */
+    public function getUserList(int $authUserId): object
+    {
+        return $this->where('id', '<>', $authUserId)
+            ->select("id", "name", "screenName", "profileImage")
+            ->paginate(Paginate::NUM_USER_PER_PAGE);
+    }
 }

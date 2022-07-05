@@ -14,12 +14,9 @@
               </div>
             </router-link>
             <div class="followButton">
-              <FollowButton :id="user.id"></FollowButton>
+              <FollowButton :id="user.id" :isFollow="followIdsData.includes(user.id)"></FollowButton>
             </div>
           </li>
-          <div class="mt-4 mb-5 d-flex justify-content-center">
-            <button :class="[is_showMore ? 'is_showMore' : '']" @click="is_addUserList">{{ text }}</button>
-          </div>
         </ul>
       </div>
     </div>
@@ -27,6 +24,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import FollowButton from './FollowButtonComponent.vue';
 export default {
@@ -34,45 +32,45 @@ export default {
     FollowButton
   },
   setup() {
-    const userList = ref();
+    const userList = ref([]);
     const is_showMore = ref(true);
     const page = ref(0);
-    const maxPage = ref(0);
     const text = ref("Show More");
-    const getMaxPage = () => {
-      axios.get('/maxPage').then(response => {
-        maxPage.value = response.data;
-      })
+    const is_loading = ref(true);
+    const followIdsData = ref([]);
+    const stop = ref(false);
+
+    const getData = async () => {
+      is_loading.value = true;
+      const getData = await axios.get(`/api/index?page=${++page.value}`);
+      if (getData.data.users.last_page >= page.value) {
+        for (const element of getData.data.users.data) {
+          userList.value.push(element);
+        }
+        is_loading.value = false;
+      };
     }
-    const getUserList = () => {
-      axios.get('/userList/' + (page.value + 1)).then(response => {
-        userList.value = response.data;
-        page.value++;
-      })
-    }
-    const addUserList = () => {
-      axios.get('/userList/' + (page.value + 1)).then(response => {
-        userList.value = response.data
-        page.value++;
-      })
-    }
-    const is_addUserList = () => {
-      if (maxPage.value === page.value) {
-        is_showMore.value = false;
-        text.value = "No More";
-      } else {
-        addUserList()
-      }
+    async function getFollowIds() {
+      const followIds = await axios.get(`/api/followIds`);
+      followIdsData.value = followIds.data;
+      getData();
     }
     onMounted(() => {
-      getUserList(),
-        getMaxPage()
+      getFollowIds()
+      window.addEventListener('scroll', () => {
+        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400 
+          && is_loading.value === false) {
+          getData()
+        }
+      })
     })
     return {
       userList,
       is_showMore,
       text,
-      is_addUserList
+      is_loading,
+      followIdsData,
+      getData
     }
   }
 };
@@ -125,9 +123,12 @@ button {
   transition: all .3s;
 }
 
+.is_loading {
+  pointer-events: none;
+}
+
 .is_showMore:hover {
   opacity: .85;
   color: #fff;
 }
 </style>
-
