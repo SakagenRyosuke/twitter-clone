@@ -17,7 +17,7 @@ export default {
     const is_loading = ref(true);
     const isFollow = async () => {
       // ログインユーザーのフォローリストを取得してpropsで受け取ったIDが入っているかでフォロースタイルにする
-      const isFollow = await axios.get('/users/followList/' + props.id);
+      const isFollow = await axios.get('/api/users/followList/' + props.id);
       if (isFollow.data === 1) {
         is_follow.value = true;
         text.value = "Following";
@@ -26,14 +26,14 @@ export default {
     }
     async function follow() {
       try {
-        await axios.post('/users/' + props.id + '/follow');
+        await axios.post('/api/users/' + props.id + '/follow');
       } catch (error) {
         alert("エラーが発生しました。")
       }
     }
     async function unfollow() {
       try {
-        await axios.post('/users/' + props.id + '/unfollow');
+        await axios.post('/api/users/' + props.id + '/unfollow');
       } catch (error) {
         alert("エラーが発生しました。")
       }

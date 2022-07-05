@@ -64,11 +64,11 @@ export default {
   setup() {
     const user = ref("")
     const getUser = () => {
-      axios.get('/loginUser').then(response => user.value = response.data)
+      axios.get('/api/loginUser').then(response => user.value = response.data)
     }
     const logout = () => {
       axios
-        .post("/logout")
+        .post("/api/logout")
         .then(() => {
           // login.vueを用意するつもり（時間があったら）
           // this.$router.push("/login");

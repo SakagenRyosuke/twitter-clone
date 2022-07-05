@@ -44,7 +44,7 @@ export default {
 
     const getData = async () => {
       is_loading.value = true;
-      const getData = await axios.get(`/index?page=${++page.value}`);
+      const getData = await axios.get(`/api/index?page=${++page.value}`);
       if (getData.data.users.last_page >= page.value) {
         for (const element of getData.data.users.data) {
           userList.value.push(element);

@@ -89,8 +89,8 @@ export default {
     const text = ref("Show More");
 
     const getData = async () => {
-      const getProfile = axios.get(`/userProfile/${props.id}`);
-      const getTweet = axios.get(`/timeLine/${props.id}?page=${++page.value}`);
+      const getProfile = axios.get(`/api/userProfile/${props.id}`);
+      const getTweet = axios.get(`/api/timeLine/${props.id}?page=${++page.value}`);
       const profileData = await getProfile;
       user.value = profileData.data.user;
       isLoginUser.value = profileData.data.isAuthUser;
@@ -116,7 +116,7 @@ export default {
     }
     async function addData() {
       is_loading.value = true;
-      const getTweet = axios.get(`/timeLine/${props.id}?page=${++page.value}`);
+      const getTweet = axios.get(`/api/timeLine/${props.id}?page=${++page.value}`);
       const tweetData = await getTweet;
       if (tweetData.data.last_page >= page.value) {
         for (const element of tweetData.data.data) {
