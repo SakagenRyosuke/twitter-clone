@@ -17,10 +17,6 @@
               <FollowButton :id="user.id" :isFollow="followIdsData.includes(user.id)"></FollowButton>
             </div>
           </li>
-          <div class="mt-4 mb-5 d-flex justify-content-center">
-            <button :class="[is_showMore ? 'is_showMore' : '', is_loading ? 'is_loading' : '']" @click="getData">{{ text
-            }}</button>
-          </div>
         </ul>
       </div>
     </div>
@@ -42,6 +38,7 @@ export default {
     const text = ref("Show More");
     const is_loading = ref(true);
     const followIdsData = ref([]);
+    const stop = ref(false);
 
     const getData = async () => {
       is_loading.value = true;
@@ -52,11 +49,6 @@ export default {
         }
         is_loading.value = false;
       };
-      if (getData.data.users.last_page < (page.value + 1)) {
-        is_loading.value = true;
-        is_showMore.value = false;
-        text.value = "No More";
-      }
     }
     async function getFollowIds() {
       const followIds = await axios.get(`/api/followIds`);
@@ -65,6 +57,12 @@ export default {
     }
     onMounted(() => {
       getFollowIds()
+      window.addEventListener('scroll', () => {
+        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400 
+          && is_loading.value === false) {
+          getData()
+        }
+      })
     })
     return {
       userList,
