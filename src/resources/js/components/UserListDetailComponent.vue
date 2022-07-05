@@ -53,10 +53,10 @@
               </router-link>
             </div>
           </li>
-          <div class="mt-4 mb-5 d-flex justify-content-center">
+          <!-- <div class="mt-4 mb-5 d-flex justify-content-center">
             <button :class="[is_showMore ? 'is_showMore' : '', is_loading ? 'is_loading' : '']" @click="addData">{{ text
             }}</button>
-          </div>
+          </div> -->
         </ul>
       </div>
     </div>
@@ -83,11 +83,9 @@ export default {
     const followedCount = ref(0)
     const tweetsCount = ref(0)
     const tweets = ref([])
-    const is_showMore = ref(true);
     const is_loading = ref(true);
     const is_follow = ref();
     const page = ref(0);
-    const text = ref("Show More");
 
     const getData = async () => {
       const getProfile = axios.get(`/api/userProfile/${props.id}`);
@@ -106,14 +104,6 @@ export default {
           tweets.value.push(element);
         }
         is_loading.value = false;
-        if (tweetData.data.last_page < (page.value + 1)) {
-          is_loading.value = true;
-          is_showMore.value = false;
-          text.value = "No More";
-        }
-      } else {
-        is_showMore.value = false;
-        text.value = "No Tweet";
       }
     }
     async function addData() {
@@ -126,14 +116,15 @@ export default {
         }
         is_loading.value = false;
       }
-      if (tweetData.data.last_page < (page.value + 1)) {
-        is_loading.value = true;
-        is_showMore.value = false;
-        text.value = "No More";
-      }
     }
     onMounted(() => {
-      getData()
+      getData(),
+      window.addEventListener('scroll', () => {
+        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400
+          && is_loading.value === false) {
+          addData()
+        }
+      })
     })
     return {
       is_follow,
@@ -143,11 +134,8 @@ export default {
       followingCount,
       isLoginUser,
       tweets,
-      is_showMore,
-      text,
       tweetsCount,
-      is_loading,
-      addData
+      is_loading
     }
   },
 };
