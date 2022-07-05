@@ -12,7 +12,7 @@ class Follow extends Model
     protected $fillable = ['followingId', 'followedId'];
 
     /**
-     * idが引数と一致する人のフォローしている人数を取得してその値を返す
+     * フォロー数取得
      * 
      * @return integer
      */
@@ -22,7 +22,7 @@ class Follow extends Model
     }
 
     /**
-     * idが引数と一致する人のフォローされている人数を取得してその値を返す
+     * フォロワー数取得
      * 
      * @return integer
      */
@@ -32,7 +32,7 @@ class Follow extends Model
     }
 
     /**
-     * 引数$idのことをauthUserがフォローしているかをintで返す
+     * authUserがフォローしているか取得
      * 
      * @return int
      */
@@ -44,11 +44,11 @@ class Follow extends Model
     /**
      * フォローする
      * 
-     * レコードを作成しfollowsテーブルに追加する
+     * レコードを作成しfollowsテーブルに追加
      * 
      * @return void
      */
-    public function doFollowing(int $id, int $authUserId)
+    public function follow(int $id, int $authUserId)
     {
         $this->firstOrCreate([
             'followedId' => $id,
@@ -63,7 +63,7 @@ class Follow extends Model
      * 
      * @return void
      */
-    public function doUnfollowing(int $id, int $authUserId)
+    public function unfollow(int $id, int $authUserId)
     {
         $follow = $this->where('followedId', $id)
             ->where('followingId', $authUserId)
