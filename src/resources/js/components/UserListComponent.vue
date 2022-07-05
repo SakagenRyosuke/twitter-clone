@@ -18,7 +18,8 @@
             </div>
           </li>
           <div class="mt-4 mb-5 d-flex justify-content-center">
-            <button :class="[is_showMore ? 'is_showMore' : '',is_loading ? 'is_loading' : '']" @click="getData">{{ text }}</button>
+            <button :class="[is_showMore ? 'is_showMore' : '', is_loading ? 'is_loading' : '']" @click="getData">{{ text
+            }}</button>
           </div>
         </ul>
       </div>
@@ -43,13 +44,14 @@ export default {
 
     const getData = async () => {
       is_loading.value = true;
-      const getData = await axios.get(`/index/${++page.value}`);
-      if (getData.data.users.length > 0) {
-        for (const element of getData.data.users) {
+      const getData = await axios.get(`/index?page=${++page.value}`);
+      if (getData.data.users.last_page >= page.value) {
+        for (const element of getData.data.users.data) {
           userList.value.push(element);
         }
         is_loading.value = false;
-      } else {
+      };
+      if (getData.data.users.last_page < (page.value + 1)) {
         is_loading.value = true;
         is_showMore.value = false;
         text.value = "No More";

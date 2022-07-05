@@ -54,7 +54,8 @@
             </div>
           </li>
           <div class="mt-4 mb-5 d-flex justify-content-center">
-            <button :class="[is_showMore ? 'is_showMore' : '',is_loading ? 'is_loading' : '']" @click="addData">{{ text }}</button>
+            <button :class="[is_showMore ? 'is_showMore' : '', is_loading ? 'is_loading' : '']" @click="addData">{{ text
+            }}</button>
           </div>
         </ul>
       </div>
@@ -89,8 +90,7 @@ export default {
 
     const getData = async () => {
       const getProfile = axios.get(`/userProfile/${props.id}`);
-      const getTweet = axios.get(`/timeLine/${props.id}/${++page.value}`);
-
+      const getTweet = axios.get(`/timeLine/${props.id}?page=${++page.value}`);
       const profileData = await getProfile;
       user.value = profileData.data.user;
       isLoginUser.value = profileData.data.isAuthUser;
@@ -99,11 +99,16 @@ export default {
       tweetsCount.value = profileData.data.tweetsCount;
 
       const tweetData = await getTweet;
-      if (tweetData.data.length > 0) {
-        for (const element of tweetData.data) {
+      if (tweetData.data.last_page >= page.value) {
+        for (const element of tweetData.data.data) {
           tweets.value.push(element);
         }
         is_loading.value = false;
+        if (tweetData.data.last_page < (page.value + 1)) {
+          is_loading.value = true;
+          is_showMore.value = false;
+          text.value = "No More";
+        }
       } else {
         is_showMore.value = false;
         text.value = "No Tweet";
@@ -111,14 +116,15 @@ export default {
     }
     async function addData() {
       is_loading.value = true;
-      const getTweet = axios.get(`/timeLine/${props.id}/${++page.value}`);
+      const getTweet = axios.get(`/timeLine/${props.id}?page=${++page.value}`);
       const tweetData = await getTweet;
-      if (tweetData.data.length > 0) {
-        for (const element of tweetData.data) {
+      if (tweetData.data.last_page >= page.value) {
+        for (const element of tweetData.data.data) {
           tweets.value.push(element);
         }
         is_loading.value = false;
-      } else {
+      } 
+      if(tweetData.data.last_page < (page.value + 1)){
         is_loading.value = true;
         is_showMore.value = false;
         text.value = "No More";
@@ -169,7 +175,7 @@ li:hover {
 
 button {
   cursor: default;
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 3px;
   font-size: 14px;
   color: #333;
