@@ -53,10 +53,6 @@
               </router-link>
             </div>
           </li>
-          <!-- <div class="mt-4 mb-5 d-flex justify-content-center">
-            <button :class="[is_showMore ? 'is_showMore' : '', is_loading ? 'is_loading' : '']" @click="addData">{{ text
-            }}</button>
-          </div> -->
         </ul>
       </div>
     </div>
