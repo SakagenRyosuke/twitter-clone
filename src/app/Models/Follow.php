@@ -39,7 +39,6 @@ class Follow extends Model
     public function getFollowList(int $id,int $authUserId): int
     {
         return $this->where('followingId', $authUserId)->where('followedId', $id)->count();
-        // dd($this->where('followingId', $authUserId)->where('followedId', $id)->count());
     }
 
     /**
