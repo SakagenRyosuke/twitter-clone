@@ -25,9 +25,9 @@ class UserController extends Controller
      *
      * @return array
      */
-    public function index(int $page, User $user): array
+    public function index(User $user): array
     {
-        $users = $user->getUserList($page, Auth::id());
+        $users = $user->getUserList(Auth::id());
         return [
             "users" => $users
         ];
@@ -81,5 +81,11 @@ class UserController extends Controller
     public function isLoginUser(int $user): int
     {
         return  Auth::id() == $user ? true : false;
+    }
+
+    public function test()
+    {
+        $users = User::paginate(5);
+        return $users;
     }
 }

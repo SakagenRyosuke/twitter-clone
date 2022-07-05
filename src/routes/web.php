@@ -39,6 +39,8 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('/home/{any}', function () {
     return view('home');
   })->where('any', '.*');
+
+  // 以下api.phpに移行
   /**
    * ログインユーザーの取得
    * NavComponent
@@ -53,7 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
    * ユーザー一覧の取得
    * UserListComponent
    */
-  Route::get('/index/{page}', [UserController::class, 'index']);
+  Route::get('/index', [UserController::class, 'index']);
   /**
    * 引数のidとログインユーザーのidが一致するかどうかをブール値で取得
    * UserListDetailComponent
@@ -68,7 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
    * idが引数と一致するユーザーのtweetを取得
    * UserListDetailComponent
    */
-  Route::get('/timeLine/{id}/{page}', [TweetController::class, 'index']);
+  Route::get('/timeLine/{id}', [TweetController::class, 'index']);
   /**
    * ログインユーザーのフォローリストの取得
    * FollowButtonComponent

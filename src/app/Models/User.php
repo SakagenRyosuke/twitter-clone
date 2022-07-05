@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Consts\AdditionalNumber;
+use App\Consts\Paginate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,11 +49,10 @@ class User extends Authenticatable
      *
      * @return object
      */
-    public function getUserList(int $page, int $authUserId): object
+    public function getUserList(int $authUserId): object
     {
-        $count = AdditionalNumber::SHOW_USERS_NUMBER * $page;
-        $start = $count - AdditionalNumber::SHOW_USERS_NUMBER + 1;
-        $allUser = $this->where('id', '<>', $authUserId)->select("id", "name", "screenName", "profileImage")->whereBetween('id', [$start, $count])->get();
-        return $allUser;
+        return $this->where('id', '<>', $authUserId)
+            ->select("id", "name", "screenName", "profileImage")
+            ->paginate(Paginate::NUM_USER_PER_PAGE);
     }
 }

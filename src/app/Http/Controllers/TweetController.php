@@ -13,9 +13,9 @@ class TweetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(int $id, int $page, Tweet $tweet): object
+    public function index(int $id, Tweet $tweet): object
     {
-        return $tweet->getTimeLine($id, $page);
+        return $tweet->getTimeLine($id);
     }
 
     /**

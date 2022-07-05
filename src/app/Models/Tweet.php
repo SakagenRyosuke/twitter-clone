@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Consts\AdditionalNumber;
+use App\Consts\Paginate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,11 +17,12 @@ class Tweet extends Model
      * 
      * @return object
      */
-    public function getTimeLine(int $id, int $page): object
+    public function getTimeLine(int $id): object
     {
-        $count = AdditionalNumber::SHOW_TWEETS_NUMBER;
-        $start = ($page - 1) * AdditionalNumber::SHOW_TWEETS_NUMBER;
-        return $this->where('userId', $id)->orderBy('created_at', 'desc')->select("id", "text", "created_at")->skip($start)->take($count)->get();
+        return $this->where('userId', $id)
+            ->orderBy('created_at', 'desc')
+            ->select("id", "text", "created_at")
+            ->paginate(Paginate::NUM_TWEET_PER_PAGE);
     }
 
     /**
