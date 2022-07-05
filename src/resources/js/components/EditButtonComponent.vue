@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper">
-    <!-- <button class="[is_follow ? 'is_follow' : '']" @click="doFollow">{{ text }}</button> -->
     <button class="edit">Edit</button>
   </div>
 </template>
