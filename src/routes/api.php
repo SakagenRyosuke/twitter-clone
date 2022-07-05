@@ -62,4 +62,9 @@ Route::middleware('auth')->group(function () {
      * FollowButtonComponent
      */
     Route::post('/users/{id}/unfollow', [FollowController::class, 'unfollow']);
+    /**
+     * フォローリスト取得
+     * FollowButtonComponent
+     */
+    Route::get('/followIds', [FollowController::class, 'getFollowIds']);
 });

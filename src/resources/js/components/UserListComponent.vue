@@ -14,7 +14,7 @@
               </div>
             </router-link>
             <div class="followButton">
-              <FollowButton :id="user.id"></FollowButton>
+              <FollowButton :id="user.id" :isFollow="followIdsData.includes(user.id)"></FollowButton>
             </div>
           </li>
           <div class="mt-4 mb-5 d-flex justify-content-center">
@@ -41,6 +41,7 @@ export default {
     const page = ref(0);
     const text = ref("Show More");
     const is_loading = ref(true);
+    const followIdsData = ref([]);
 
     const getData = async () => {
       is_loading.value = true;
@@ -57,14 +58,20 @@ export default {
         text.value = "No More";
       }
     }
+    async function getFollowIds() {
+      const followIds = await axios.get(`/api/followIds`);
+      followIdsData.value = followIds.data;
+      getData();
+    }
     onMounted(() => {
-      getData()
+      getFollowIds()
     })
     return {
       userList,
       is_showMore,
       text,
       is_loading,
+      followIdsData,
       getData
     }
   }

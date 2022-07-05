@@ -24,9 +24,9 @@ class FollowController extends Controller
      * 
      * @return object
      */
-    public function getFollowList(int $id,Follow $follow): int
+    public function getFollowList(int $id, Follow $follow): int
     {
-        return $follow->getFollowList($id,Auth::id());
+        return $follow->getFollowList($id, Auth::id());
     }
 
     /**
@@ -51,5 +51,15 @@ class FollowController extends Controller
     public function unfollow(int $id, Follow $follow)
     {
         $follow->unfollow($id, Auth::id());
+    }
+
+    /**
+     * フォローリストの取得
+     * 
+     * @return array
+     */
+    public function getFollowIds(Follow $follow): array
+    {
+        return $follow->getFollowIds(Auth::id());
     }
 }

@@ -26,7 +26,7 @@
             <h1 class="p-0 m-0 fs-2 text-center" v-if="user">{{ user.screenName }}</h1>
             <p class="p-0 m-0 text-center" v-if="user">{{ user.name }}</p>
           </div>
-          <FollowButton v-show="isLoginUser === 0" :id="id"></FollowButton>
+          <FollowButton v-if="is_follow" v-show="isLoginUser === 0" :id="id" :isFollow="is_follow"></FollowButton>
           <EditButton v-show="isLoginUser === 1"></EditButton>
         </div>
       </div>
@@ -85,6 +85,7 @@ export default {
     const tweets = ref([])
     const is_showMore = ref(true);
     const is_loading = ref(true);
+    const is_follow = ref();
     const page = ref(0);
     const text = ref("Show More");
 
@@ -97,6 +98,7 @@ export default {
       followingCount.value = profileData.data.followingCount;
       followedCount.value = profileData.data.followedCount;
       tweetsCount.value = profileData.data.tweetsCount;
+      is_follow.value = profileData.data.isFollow === 1 ? true : false;
 
       const tweetData = await getTweet;
       if (tweetData.data.last_page >= page.value) {
@@ -123,8 +125,8 @@ export default {
           tweets.value.push(element);
         }
         is_loading.value = false;
-      } 
-      if(tweetData.data.last_page < (page.value + 1)){
+      }
+      if (tweetData.data.last_page < (page.value + 1)) {
         is_loading.value = true;
         is_showMore.value = false;
         text.value = "No More";
@@ -134,6 +136,7 @@ export default {
       getData()
     })
     return {
+      is_follow,
       user,
       id,
       followedCount,

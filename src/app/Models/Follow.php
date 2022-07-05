@@ -36,9 +36,9 @@ class Follow extends Model
      * 
      * @return int
      */
-    public function getFollowList(int $id,int $authUserId): int
+    public function isFollow(int $id, int $authUserId): int
     {
-        return $this->where('followingId', $authUserId)->where('followedId', $id)->count();
+        return $this->where('followingId', $authUserId)->where('followedId', $id)->exists() == true ? 1 : 0;
     }
 
     /**
@@ -71,5 +71,16 @@ class Follow extends Model
         if ($follow) {
             $follow->delete();
         }
+    }
+
+    /**
+     * フォローリストの取得
+     * 
+     * @return array
+     */
+    public function getFollowIds(int $authUserId): array
+    {
+        $followIdsData = $this->where('followingId', $authUserId)->get('followedId')->pluck('followedId')->toArray();
+        return array_map('intval', $followIdsData);
     }
 }

@@ -62,14 +62,15 @@ class UserController extends Controller
      * 
      * @return array<object, int>
      */
-    public function show(User $user,Follow $follow, Tweet $tweet): array
+    public function show(User $user, Follow $follow, Tweet $tweet): array
     {
         return [
             "user" => $user,
             "followingCount" => $follow->getFollowingCount($user["id"]),
             "followedCount" => $follow->getFollowedCount($user["id"]),
             "isAuthUser" => Auth::id() == $user["id"] ? 1 : 0,
-            "tweetsCount" => $tweet->getTweetCount($user["id"])
+            "tweetsCount" => $tweet->getTweetCount($user["id"]),
+            "isFollow" => $follow->isFollow($user["id"], Auth::id())
         ];
     }
 

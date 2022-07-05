@@ -1,29 +1,19 @@
 <template>
   <div class="wrapper">
-    <button :class="[is_follow ? 'is_follow' : '',is_loading ? 'is_loading': '']" @click="doFollow">{{ text }}</button>
-    <!-- -->
+    <button :class="[is_follow ? 'is_follow' : '']" @click="doFollow">{{ is_follow
+        ? "Following" : "Follow"
+    }}</button>
   </div>
 </template>
 <script>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 export default {
   props: {
-    id: Number
+    id: Number,
+    isFollow: Boolean
   },
   setup(props) {
-    const followList = ref()
-    const is_follow = ref(false)
-    const text = ref("Follow")
-    const is_loading = ref(true);
-    const isFollow = async () => {
-      // ログインユーザーのフォローリストを取得してpropsで受け取ったIDが入っているかでフォロースタイルにする
-      const isFollow = await axios.get('/api/users/followList/' + props.id);
-      if (isFollow.data === 1) {
-        is_follow.value = true;
-        text.value = "Following";
-      }
-      is_loading.value = false;
-    }
+    const is_follow = ref(props.isFollow)
     async function follow() {
       try {
         await axios.post('/api/users/' + props.id + '/follow');
@@ -48,14 +38,8 @@ export default {
         unfollow();
       }
     }
-    onMounted(() => {
-      isFollow()
-    })
     return {
       is_follow,
-      text,
-      followList,
-      is_loading,
       doFollow
     }
   },
