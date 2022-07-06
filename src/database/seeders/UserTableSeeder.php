@@ -21,7 +21,7 @@ class UserTableSeeder extends Seeder
             User::create([
                 'name'  => 'test_user' . $i,
                 'screenName' => 'TEST' . $i,
-                'profileImage' => 'https://placehold.jp/50x50.png',
+                'profileImage' => '/images/noImage.svg',
                 'email'  => 'test' . $i . '@test.com',
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
