@@ -43,6 +43,11 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('/userProfile/{user}', [UserController::class, 'show']);
     /**
+     * AuthUserのプロフィール編集
+     * EditButtonComponent
+     */
+    Route::post('/editUser', [UserController::class, 'update']);
+    /**
      * idが引数と一致するユーザーのtweetを取得
      * UserListDetailComponent
      */

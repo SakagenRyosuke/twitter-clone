@@ -55,4 +55,22 @@ class User extends Authenticatable
             ->select("id", "name", "screenName", "profileImage")
             ->paginate(Paginate::NUM_USER_PER_PAGE);
     }
+
+    /**
+     * 認証ユーザーのみユーザー情報更新
+     */
+    public function updateUser(int $authId, object $request): bool
+    {
+        $user = $this->where('id', $authId)->first();
+
+        $user->screenName = $request->screenName;
+
+        if ($request->file('profileImage')) {
+            $imageName = $request->file('profileImage')->hashName();
+            $user->profileImage = '/storage/' . $imageName;
+            $request->file('profileImage')->storeAs('public', $imageName);
+        }
+
+        return $user->save();
+    }
 }

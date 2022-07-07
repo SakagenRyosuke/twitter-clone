@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Requests\User\PostRequest;
 use App\Models\Follow;
 use App\Models\Tweet;
 use Illuminate\Http\Request;
@@ -84,9 +85,14 @@ class UserController extends Controller
         return  Auth::id() == $user ? true : false;
     }
 
-    public function test()
+
+    /**
+     * ログインユーザーのプロフィールを編集する
+     * 
+     * @return bool
+     */
+    public function update(PostRequest $request, User $user): bool
     {
-        $users = User::paginate(5);
-        return $users;
+        return $user->updateUser(Auth::id(), $request);
     }
 }
