@@ -113,14 +113,17 @@ export default {
         is_loading.value = false;
       }
     }
+    function uploadFile() {
+      console.log(this.$refs.preview.files[0])
+    }
     onMounted(() => {
       getData(),
-      window.addEventListener('scroll', () => {
-        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400
-          && is_loading.value === false) {
-          addData()
-        }
-      })
+        window.addEventListener('scroll', () => {
+          if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400
+            && is_loading.value === false) {
+            addData()
+          }
+        })
     })
     return {
       is_follow,
@@ -131,9 +134,17 @@ export default {
       isLoginUser,
       tweets,
       tweetsCount,
-      is_loading
+      is_loading,
+      uploadFile
     }
   },
+  watch: {
+    $route(to, from) {
+      if (from.name === to.name && from.params.id != to.params.id) {
+        location.reload();
+      }
+    }
+  }
 };
 </script>
 <style scoped>
@@ -209,5 +220,9 @@ span {
 
 .tweet-text {
   color: #333;
+}
+
+img {
+  object-fit: cover;
 }
 </style>

@@ -131,4 +131,8 @@ button {
   opacity: .85;
   color: #fff;
 }
+
+img {
+  object-fit: cover;
+}
 </style>

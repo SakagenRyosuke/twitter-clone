@@ -6,7 +6,7 @@
 </template>
 <script>
 import Nav from "./components/NavComponent.vue";
-import axios from 'axios'
+import axios from 'axios';
 
 axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -14,7 +14,7 @@ axios.defaults.headers.common = {
 };
 
 export default {
-  components: { Nav }
+  components: { Nav },
 };
 </script>
 <style scoped>

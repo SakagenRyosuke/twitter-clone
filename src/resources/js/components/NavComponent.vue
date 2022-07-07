@@ -18,7 +18,8 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/home/user-list" class="nav-link link-dark" :class="{ 'active': $route.path === '/home/user-list' }">
+          <router-link to="/home/user-list" class="nav-link link-dark"
+            :class="{ 'active': $route.path === '/home/user-list' }">
             <svg class="bi me-2" width="16" height="16">
               <use xlink:href="#home"></use>
             </svg>
@@ -26,7 +27,8 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/home/create-tweet" class="nav-link link-dark" :class="{ 'active': $route.path === '/home/create-tweet' }">
+          <router-link to="/home/create-tweet" class="nav-link link-dark"
+            :class="{ 'active': $route.path === '/home/create-tweet' }">
             <svg class="bi me-2" width="16" height="16">
               <use xlink:href="#home"></use>
             </svg>
@@ -44,7 +46,9 @@
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
           <li><a class="dropdown-item" href="#">New project...</a></li>
           <li><a class="dropdown-item" href="#">Settings</a></li>
-          <router-link :to="'/home/user-profile/' + user.id"><li><a class="dropdown-item">Profile</a></li></router-link>
+          <router-link :to="'/home/user-profile/' + user.id">
+            <li><a class="dropdown-item">Profile</a></li>
+          </router-link>
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -90,11 +94,16 @@ export default {
 };
 </script>
 <style scoped>
-  .nav-content {
-    width: 280px;
-    height: 100%;
-  }
-  a {
-    text-decoration: none;
-  }
+.nav-content {
+  width: 280px;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  object-fit: cover;
+}
 </style>
