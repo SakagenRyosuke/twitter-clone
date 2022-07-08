@@ -220,6 +220,7 @@ span {
 
 .tweet-text {
   color: #333;
+  white-space: pre-wrap;
 }
 
 img {

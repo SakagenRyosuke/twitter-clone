@@ -3,9 +3,11 @@
   <div class="main">
     <router-view />
   </div>
+  <CreateTweet></CreateTweet>
 </template>
 <script>
 import Nav from "./components/NavComponent.vue";
+import CreateTweet from './components/CreateTweetComponent.vue';
 import axios from 'axios';
 
 axios.defaults.headers.common = {
@@ -14,7 +16,7 @@ axios.defaults.headers.common = {
 };
 
 export default {
-  components: { Nav },
+  components: { Nav, CreateTweet },
 };
 </script>
 <style scoped>

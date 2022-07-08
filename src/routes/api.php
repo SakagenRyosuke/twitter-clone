@@ -72,4 +72,9 @@ Route::middleware('auth')->group(function () {
      * FollowButtonComponent
      */
     Route::get('/followIds', [FollowController::class, 'getFollowIds']);
+    /**
+     * Tweetの作成
+     * CreateTweetComponent
+     */
+    Route::post('/createTweet', [TweetController::class, 'create']);
 });

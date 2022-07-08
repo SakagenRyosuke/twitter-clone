@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Tweet\PostRequest;
 use App\Models\Tweet;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -21,11 +23,11 @@ class TweetController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return bool
      */
-    public function create()
+    public function create(PostRequest $request, Tweet $tweet): bool
     {
-        //
+        return $tweet->createTweet(Auth::id(), $request);
     }
 
     /**

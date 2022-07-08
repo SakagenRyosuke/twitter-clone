@@ -34,4 +34,15 @@ class Tweet extends Model
     {
         return $this->where('userId', $id)->count();
     }
+
+    /**
+     * Tweet作成
+     */
+    public function createTweet(int $authId, object $request)
+    {
+        $this->userId = $authId;
+        $this->text = $request->tweet;
+
+        return $this->save();
+    }
 }
