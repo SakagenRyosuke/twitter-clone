@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Tweet\PostRequest;
+use App\Models\Favorite;
+use App\Models\Retweet;
 use App\Models\Tweet;
 use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Http\Request;
 
 class TweetController extends Controller
 {
@@ -21,46 +21,32 @@ class TweetController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return bool
-     */
-    public function create(PostRequest $request)
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Tweet $tweet): bool
+    public function store(PostRequest $request, Tweet $tweet): bool
     {
         return $tweet->createTweet(Auth::id(), $request);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * ツイートの状態を取得する
+     * 
+     * ファボリストとリツイートリストの取得
+     * 
+     * @return array
      */
-    public function show($id)
+    public function getTweetStatus(Favorite $favorite, Retweet $retweet): array
     {
-        //
-    }
+        $favoriteIds = $favorite->getFavoriteIds(Auth::id());
+        $retweetIds = $retweet->getRetweetIds(Auth::id());
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return [
+            'favoriteIds' => $favoriteIds,
+            'retweetIds' => $retweetIds
+        ];
     }
 
     /**
@@ -70,7 +56,7 @@ class TweetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $tweetId, Tweet $tweet): bool
+    public function update(PostRequest $request, int $tweetId, Tweet $tweet): bool
     {
         return $tweet->updateTweet($tweetId, $request, Auth::id());
     }
@@ -84,5 +70,19 @@ class TweetController extends Controller
     public function destroy(int $tweetId, Tweet $tweet): bool
     {
         return $tweet->destroyTweet($tweetId, Auth::id());
+    }
+
+    /**
+     * Tweet単体の情報と状態を取得
+     *
+     * @return array
+     */
+    public function show(int $tweetId, Tweet $tweet, Favorite $favorite, Retweet $retweet): array
+    {
+        return [
+            'tweet' => $tweet->getTweet($tweetId),
+            'isFavorite' => $favorite->getIsFavorite($tweetId),
+            'isRetweet' => $retweet->getIsRetweet($tweetId)
+        ];
     }
 }

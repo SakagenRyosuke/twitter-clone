@@ -70,4 +70,14 @@ class Favorite extends Model
         $favoriteIdsData = $this->where('userId', $authUserId)->get('tweetId')->pluck('tweetId')->toArray();
         return array_map('intval', $favoriteIdsData);
     }
+
+    /**
+     * ファボしているか取得する
+     * 
+     * @return int
+     */
+    public function getIsFavorite(int $tweetId): int
+    {
+        return $this->where('tweetId', $tweetId)->exits() ? 1 : 0;
+    }
 }

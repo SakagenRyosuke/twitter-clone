@@ -14,6 +14,19 @@ class Tweet extends Model
     protected $fillable = ['text'];
 
     /**
+     * tweet単体の取得
+     * 
+     * @return object
+     */
+    public function getTweet(int $tweetId): object
+    {
+        return DB::table('tweets')
+        ->where('tweets.id', $tweetId)
+        ->join('users', 'tweets.userId', '=', 'users.id')
+        ->first();
+    }
+
+    /**
      * ユーザごとのtweet一覧を取得
      * 
      * @return object

@@ -69,4 +69,14 @@ class Retweet extends Model
         $retweetIdsData = $this->where('userId', $authUserId)->get('tweetId')->pluck('tweetId')->toArray();
         return array_map('intval', $retweetIdsData);
     }
+
+    /**
+     * リツイートしているか取得する
+     * 
+     * @return int
+     */
+    public function getIsRetweet(int $tweetId): int
+    {
+        return $this->where('tweetId', $tweetId)->exits() ? 1 : 0;
+    }
 }

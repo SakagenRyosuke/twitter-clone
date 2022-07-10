@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\RetweetController;
@@ -95,23 +96,38 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('/tweetStatus', [TweetController::class, 'getTweetStatus']);
     /**
+     * Tweet単体の情報と状態を取得
+     * TweetDetailComponent
+     */
+    Route::get('/tweet/{tweetId}', [TweetController::class, 'show']);
+    /**
      * ファボする
-     * TweetComponent
+     * FavoriteComponent
      */
     Route::post('/tweets/{tweetId}/favorite', [FavoriteController::class, 'favorite']);
     /**
      * ファボを解除する
-     * TweetComponent
+     * FavoriteComponent
      */
     Route::post('/tweets/{tweetId}/unfavorite', [FavoriteController::class, 'unfavorite']);
     /**
      * リツイートする
-     * TweetComponent
+     * RetweetComponent
      */
     Route::post('/tweets/{tweetId}/retweet', [RetweetController::class, 'retweet']);
     /**
      * リツイートを解除する
-     * TweetComponent
+     * RetweetComponent
      */
     Route::post('/tweets/{tweetId}/unretweet', [RetweetController::class, 'unretweet']);
+    /**
+     * Commentの作成
+     * CreateCommentComponent
+     */
+    Route::post('/createTweet', [CommentController::class, 'store']);
+    /**
+     * Comment一覧の取得
+     * TweetDetailComponent
+     */
+    Route::get('/comments/{tweetId}', [CommentController::class, 'index']);
 });
