@@ -70,9 +70,9 @@ class TweetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,int $tweetId): bool
+    public function update(Request $request, int $tweetId, Tweet $tweet): bool
     {
-        return updateTweet($tweetId, $request, Auth::id());
+        return $tweet->updateTweet($tweetId, $request, Auth::id());
     }
 
     /**
@@ -81,8 +81,8 @@ class TweetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $tweetId): bool
+    public function destroy(int $tweetId, Tweet $tweet): bool
     {
-        return destroyTweet($tweetId, Auth::id());
+        return $tweet->destroyTweet($tweetId, Auth::id());
     }
 }

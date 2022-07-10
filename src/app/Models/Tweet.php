@@ -71,8 +71,8 @@ class Tweet extends Model
     {
         $tweet = $this->where('id', $tweetId)->first();
 
-        if($tweet->userId() == $authId) {
-            $tweet->text = $request->text;
+        if($tweet->userId == $authId) {
+            $tweet->text = $request->tweet;
             return $tweet->save();
         }else {
             return false;
@@ -86,7 +86,7 @@ class Tweet extends Model
     {
         $tweet = $this->where('id', $tweetId)->first();
         
-        if($tweet->userId() == $authId) {
+        if($tweet->userId == $authId) {
             return $tweet->delete();
         }else {
             return false;
