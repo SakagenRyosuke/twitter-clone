@@ -2,7 +2,7 @@
   <div class="container col-md-12">
     <div class="card mt-5 mb-2">
       <Tweet v-if="tweet" :tweet="tweet.tweet" :isFavorite="tweet.isFavorite === 1 ? true : false"
-        :isRetweet="tweet.isRetweet === 1 ? true : false"></Tweet>
+        :isRetweet="tweet.isRetweet === 1 ? true : false" :isLoginUser="authId === tweet.tweet.userId ? 1 : 0"></Tweet>
     </div>
     <div class="container col-md-12" v-show="comments">
       <ul class="ps-0">
@@ -46,10 +46,12 @@ export default {
     const comments = ref([]);
     const is_loading = ref(false);
     const tweet = ref();
+    const authId = ref();
     const getData = async () => {
       is_loading.value = true;
       const getTweet = axios.get(`/api/tweet/${props.id}`);
       const getComments = axios.get(`/api/comments/${props.id}?page=${++page.value}`);
+      const getAuthId = axios.get('/api/authId');
 
       const tweetData = await getTweet;
       tweet.value = tweetData.data;
@@ -59,8 +61,11 @@ export default {
         for (const element of commentsData.data.data) {
           comments.value.push(element);
         }
-        is_loading.value = false;
       };
+
+      const authIdData = await getAuthId;
+      authId.value = authIdData.data;
+      is_loading.value = false;
     }
     async function addData() {
       is_loading.value = true;
@@ -84,7 +89,8 @@ export default {
     })
     return {
       tweet,
-      comments
+      comments,
+      authId
     }
   },
 };

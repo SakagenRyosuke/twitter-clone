@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Tweet\PostRequest;
 use App\Models\Favorite;
+use App\Models\Follow;
 use App\Models\Retweet;
 use App\Models\Tweet;
 use Illuminate\Support\Facades\Auth;
@@ -84,5 +85,17 @@ class TweetController extends Controller
             'isFavorite' => $favorite->getIsFavorite($tweetId),
             'isRetweet' => $retweet->getIsRetweet($tweetId)
         ];
+    }
+
+    /**
+     * home用のタイムラインを取得
+     * 
+     * @return object
+     */
+    public function getTimelines(Tweet $tweet, Follow $follow): object
+    {
+        $list = $follow->getFollowIds(Auth::id());
+        array_push($list, Auth::id());
+        return $tweet->getTimeLines($list);
     }
 }

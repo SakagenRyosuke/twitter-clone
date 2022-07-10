@@ -85,7 +85,6 @@ class UserController extends Controller
         return  Auth::id() == $user ? true : false;
     }
 
-
     /**
      * ログインユーザーのプロフィールを編集する
      * 
@@ -94,5 +93,15 @@ class UserController extends Controller
     public function update(PostRequest $request, User $user): bool
     {
         return $user->updateUser(Auth::id(), $request);
+    }
+
+    /**
+     * ログインユーザーのIDを取得する
+     * 
+     * @return int
+     */
+    public function getAuthId(): int
+    {
+        return Auth::id();
     }
 }

@@ -51,6 +51,11 @@ Route::middleware('auth')->group(function () {
      */
     Route::post('/editUser', [UserController::class, 'update']);
     /**
+     * AuthUserのidを取得
+     * EditButtonComponent
+     */
+    Route::get('/authId', [UserController::class, 'getAuthId']);
+    /**
      * idが引数と一致するユーザーのtweetを取得
      * UserListDetailComponent
      */
@@ -130,4 +135,9 @@ Route::middleware('auth')->group(function () {
      * TweetDetailComponent
      */
     Route::get('/comments/{tweetId}', [CommentController::class, 'index']);
+    /**
+     * Comment一覧の取得
+     * TweetDetailComponent
+     */
+    Route::get('/timelines', [TweetController::class, 'getTimelines']);
 });
