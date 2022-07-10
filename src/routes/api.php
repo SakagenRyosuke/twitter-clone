@@ -4,7 +4,6 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -76,5 +75,15 @@ Route::middleware('auth')->group(function () {
      * Tweetの作成
      * CreateTweetComponent
      */
-    Route::post('/createTweet', [TweetController::class, 'create']);
+    Route::post('/createTweet', [TweetController::class, 'store']);
+    /**
+     * Tweetの編集
+     * UpdateTweetComponent
+     */
+    Route::post('/updateTweet', [TweetController::class, 'update']);
+    /**
+     * Tweetの削除
+     * DestroyTweetComponent
+     */
+    Route::post('/destroyTweet', [TweetController::class, 'destroy']);
 });

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Consts\Paginate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Tweet extends Model
 {
@@ -13,20 +14,37 @@ class Tweet extends Model
     protected $fillable = ['text'];
 
     /**
-     * 引数のユーザーのtweet一覧を投稿日順にソートしてその値を返す。
+     * ユーザごとのtweet一覧を取得
      * 
      * @return object
      */
     public function getTimeLine(int $id): object
     {
-        return $this->where('userId', $id)
-            ->orderBy('created_at', 'desc')
-            ->select("id", "text", "created_at")
-            ->paginate(Paginate::NUM_TWEET_PER_PAGE);
+        return DB::table('users')
+        ->where('users.id', $id)
+        ->join('tweets', 'users.id', '=', 'tweets.userId')
+        ->select('users.*', 'tweets.*')
+        ->orderBy('tweets.created_at', 'desc')
+        ->paginate(Paginate::NUM_TWEET_PER_PAGE);
     }
 
     /**
-     * 引数のユーザーのtweet数を取得してその値を返す。
+     * タイムラインを取得
+     * 
+     * @return object
+     */
+    public function getTimeLines(array $ids): object
+    {
+        return DB::table('users')
+        ->whereIn('users.id', $ids)
+        ->join('tweets', 'users.id', '=', 'tweets.userId')
+        ->select('users.*', 'tweets.*')
+        ->orderBy('tweets.created_at', 'desc')
+        ->paginate(Paginate::NUM_TWEET_PER_PAGE);
+    }
+
+    /**
+     * tweet数の取得
      * 
      * @return int
      */
@@ -44,5 +62,34 @@ class Tweet extends Model
         $this->text = $request->tweet;
 
         return $this->save();
+    }
+
+    /**
+     * ツイートの編集
+     */
+    public function updateTweet(int $tweetId, object $request, int $authId): bool
+    {
+        $tweet = $this->where('id', $tweetId)->first();
+
+        if($tweet->userId() == $authId) {
+            $tweet->text = $request->text;
+            return $tweet->save();
+        }else {
+            return false;
+        }
+    }
+
+    /**
+     * ツイートの削除
+     */
+    public function destroyTweet(int $tweetId, int $authId): bool
+    {
+        $tweet = $this->where('id', $tweetId)->first();
+        
+        if($tweet->userId() == $authId) {
+            return $tweet->delete();
+        }else {
+            return false;
+        }
     }
 }

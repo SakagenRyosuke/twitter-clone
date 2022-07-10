@@ -25,9 +25,9 @@ class TweetController extends Controller
      *
      * @return bool
      */
-    public function create(PostRequest $request, Tweet $tweet): bool
+    public function create(PostRequest $request)
     {
-        return $tweet->createTweet(Auth::id(), $request);
+        //
     }
 
     /**
@@ -36,9 +36,9 @@ class TweetController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Tweet $tweet): bool
     {
-        //
+        return $tweet->createTweet(Auth::id(), $request);
     }
 
     /**
@@ -70,9 +70,9 @@ class TweetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,int $tweetId): bool
     {
-        //
+        return updateTweet($tweetId, $request, Auth::id());
     }
 
     /**
@@ -81,8 +81,8 @@ class TweetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $tweetId): bool
     {
-        //
+        return destroyTweet($tweetId, Auth::id());
     }
 }
