@@ -78,6 +78,6 @@ class Favorite extends Model
      */
     public function getIsFavorite(int $tweetId): int
     {
-        return $this->where('tweetId', $tweetId)->exits() ? 1 : 0;
+        return $this->where('tweetId', $tweetId)->exists() == true ? 1 : 0;
     }
 }

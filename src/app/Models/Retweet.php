@@ -77,6 +77,6 @@ class Retweet extends Model
      */
     public function getIsRetweet(int $tweetId): int
     {
-        return $this->where('tweetId', $tweetId)->exits() ? 1 : 0;
+        return $this->where('tweetId', $tweetId)->exists() == true ? 1 : 0;
     }
 }
