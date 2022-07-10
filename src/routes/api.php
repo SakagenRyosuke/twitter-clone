@@ -124,7 +124,7 @@ Route::middleware('auth')->group(function () {
      * Commentの作成
      * CreateCommentComponent
      */
-    Route::post('/createTweet', [CommentController::class, 'store']);
+    Route::post('/createComment/{tweetId}', [CommentController::class, 'store']);
     /**
      * Comment一覧の取得
      * TweetDetailComponent

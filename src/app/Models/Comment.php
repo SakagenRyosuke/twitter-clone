@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Consts\Paginate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Comment extends Model
 {
@@ -19,8 +20,11 @@ class Comment extends Model
      */
     public function getComments(int $tweetId): object
     {
-        return $this->where('tweetId', $tweetId)
-        ->orderBy('created_at', 'desc')
+        return DB::table('comments')
+        ->where('comments.tweetId', $tweetId)
+        ->join('users', 'comments.userId', '=', 'users.id')
+        ->select('users.*', 'comments.*')
+        ->orderBy('comments.created_at', 'desc')
         ->paginate(Paginate::NUM_TWEET_PER_PAGE);
     }
 

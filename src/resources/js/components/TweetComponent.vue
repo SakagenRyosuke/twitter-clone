@@ -22,11 +22,7 @@
     <div class="ms-5 buttons mb-4">
       <Favorite v-if="tweet" :isFavorite="isFavorite" :tweetId="tweet.id"></Favorite>
       <Retweet v-if="tweet" :isRetweet="isRetweet" :tweetId="tweet.id"></Retweet>
-      <div>
-        <button disabled>
-          <img src="/images/comment.svg" alt="comment">
-        </button>
-      </div>
+      <Comment v-if="tweet" :tweetId="tweet.id"></Comment>
       <UpdateTweet v-if="tweet" v-show="isLoginUser === 1" :tweetId="tweet.id" :tweetContent="tweet.text"></UpdateTweet>
       <DestroyTweet v-if="tweet" v-show="isLoginUser === 1" :tweetId="tweet.id"></DestroyTweet>
     </div>
@@ -38,6 +34,7 @@ import Favorite from './FavoriteComponent.vue';
 import Retweet from './RetweetComponent.vue';
 import UpdateTweet from './UpdateTweetComponent.vue';
 import DestroyTweet from './DestroyTweetComponent.vue';
+import Comment from './CommentComponent.vue';
 export default {
   props: {
     'tweet': Object,
@@ -50,6 +47,7 @@ export default {
     Retweet,
     UpdateTweet,
     DestroyTweet,
+    Comment
   },
   setup(props) {
     const is_favo = ref(true);

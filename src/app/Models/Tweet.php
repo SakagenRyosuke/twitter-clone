@@ -23,6 +23,7 @@ class Tweet extends Model
         return DB::table('tweets')
         ->where('tweets.id', $tweetId)
         ->join('users', 'tweets.userId', '=', 'users.id')
+        ->select('users.name', 'users.screenName', 'users.profileImage', 'tweets.*')
         ->first();
     }
 
@@ -33,10 +34,10 @@ class Tweet extends Model
      */
     public function getTimeLine(int $id): object
     {
-        return DB::table('users')
-        ->where('users.id', $id)
-        ->join('tweets', 'users.id', '=', 'tweets.userId')
-        ->select('users.*', 'tweets.*')
+        return DB::table('tweets')
+        ->where('tweets.userId', $id)
+        ->join('users', 'tweets.userId', '=', 'users.id')
+        ->select('users.name', 'users.screenName', 'users.profileImage', 'tweets.*')
         ->orderBy('tweets.created_at', 'desc')
         ->paginate(Paginate::NUM_TWEET_PER_PAGE);
     }
