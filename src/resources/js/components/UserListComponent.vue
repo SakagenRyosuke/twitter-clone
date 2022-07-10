@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="container col-md-12 mt-5">
+      <div class="container col-md-12 mt-3">
         <ul class="ps-0">
           <li class="card" v-for="user in userList">
             <router-link :to="'/home/user-profile/' + user.id">

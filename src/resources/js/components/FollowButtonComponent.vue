@@ -30,13 +30,7 @@ export default {
     }
     const doFollow = () => {
       is_follow.value = !is_follow.value;
-      if (is_follow.value === true) {
-        text.value = "Following";
-        follow()
-      } else {
-        text.value = "Follow";
-        unfollow();
-      }
+      is_follow.value === true ? follow() : unfollow();
     }
     return {
       is_follow,

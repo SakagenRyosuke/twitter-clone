@@ -1,12 +1,12 @@
 <template>
   <div class="fixed-top nav-content">
     <div class="d-flex flex-column p-3 bg-light nav-content">
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <router-link to="/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
           <use xlink:href="#bootstrap"></use>
         </svg>
         <span class="fs-4">Twitter Clone</span>
-      </a>
+      </router-link>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
@@ -75,8 +75,6 @@ export default {
       axios
         .post("/api/logout")
         .then(() => {
-          // login.vueを用意するつもり（時間があったら）
-          // this.$router.push("/login");
           location.reload();
         })
         .catch(error => {
