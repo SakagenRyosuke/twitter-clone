@@ -92,7 +92,7 @@ p {
 
 .followButton {
   position: absolute;
-  left: 90%;
+  left: 85%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
