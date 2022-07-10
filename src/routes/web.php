@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,23 +17,7 @@ use App\Http\Controllers\HomeController;
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
-  /**
-   * /にアクセスした場合welcome.bladeを表示する
-   * welcome.blade.php
-   */
-  Route::get('/', function () {
-    return view('welcome');
-  });
-  /**
-   * /homeにアクセスした場合home.bladeを表示する
-   * home.blade.php
-   */
-  Route::get('/home', [HomeController::class, 'index'])->name('home');
-  /**
-   * /home以下にアクセスした場合home.bladeを表示する
-   * home.blade.php
-   */
-  Route::get('/home/{any}', function () {
+  Route::get('/{any}', function () {
     return view('home');
   })->where('any', '.*');
 });
