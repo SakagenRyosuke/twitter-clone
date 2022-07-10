@@ -5,6 +5,8 @@ import TweetDetailComponent from "./components/TweetDetailComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
+    { path: "/", redirect: "/home" },
+    { path: "/js/bootstrap.esm.js.map", redirect: "/home" },
     {
         path: "/home",
         component: HomeComponent,
