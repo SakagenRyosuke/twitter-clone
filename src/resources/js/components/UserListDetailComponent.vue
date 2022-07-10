@@ -33,25 +33,7 @@
       <div class="container col-md-12" v-show="user, tweets">
         <ul class="ps-0">
           <li class="card" v-for="tweet in tweets">
-            <router-link :to="'/tweet/detail/' + tweet.id">
-              <div class="card-haeder p-3">
-                <div class="ms-5">
-                  <div class="d-flex">
-                    <p v-if="user">{{ user.screenName }}</p>
-                    <span class="ms-2" v-if="user">{{ user.name }}</span>
-                  </div>
-                  <div class="tweet-text" v-if="tweets">
-                    <p>{{ tweet.text }}</p>
-                    <span>{{ tweet.created_at }}</span>
-                  </div>
-                </div>
-              </div>
-            </router-link>
-            <div class="profileImage">
-              <router-link :to="'/home/user-profile/' + id">
-                <img class="rounded-circle" width="50" height="50" v-if="user" :src="user.profileImage" alt="">
-              </router-link>
-            </div>
+            <Tweet :tweet="tweet" :isLoginUser="isLoginUser" :isFavorite="favoriteIds.includes(tweet.id)" :isRetweet="retweetIds.includes(tweet.id)"></Tweet>
           </li>
         </ul>
       </div>
@@ -59,14 +41,16 @@
   </div>
 </template>
 <script>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import FollowButton from './FollowButtonComponent.vue';
 import EditButton from './EditButtonComponent.vue';
+import Tweet from './TweetComponent.vue';
 import axios from 'axios';
 export default {
   components: {
     FollowButton,
-    EditButton
+    EditButton,
+    Tweet
   },
   props: {
     id: String
@@ -82,10 +66,13 @@ export default {
     const is_loading = ref(true);
     const is_follow = ref();
     const page = ref(0);
+    const favoriteIds = ref([]);
+    const retweetIds = ref([]);
 
     const getData = async () => {
       const getProfile = axios.get(`/api/userProfile/${props.id}`);
       const getTweet = axios.get(`/api/timeLine/${props.id}?page=${++page.value}`);
+      const getTweetStatus = axios.get('/api/tweetStatus');
       const profileData = await getProfile;
       user.value = profileData.data.user;
       isLoginUser.value = profileData.data.isAuthUser;
@@ -101,6 +88,10 @@ export default {
         }
         is_loading.value = false;
       }
+
+      const tweetStatus = await getTweetStatus;
+      favoriteIds.value = tweetStatus.data.favoriteIds;
+      retweetIds.value = tweetStatus.data.retweetIds;
     }
     async function addData() {
       is_loading.value = true;
@@ -112,9 +103,6 @@ export default {
         }
         is_loading.value = false;
       }
-    }
-    function uploadFile() {
-      console.log(this.$refs.preview.files[0])
     }
     onMounted(() => {
       getData(),
@@ -135,7 +123,8 @@ export default {
       tweets,
       tweetsCount,
       is_loading,
-      uploadFile
+      favoriteIds,
+      retweetIds
     }
   },
   watch: {
@@ -167,60 +156,8 @@ li:hover {
   background-color: rgba(245, 245, 245, 0.8) !important;
 }
 
-.showMoreButton {
-  margin-top: 30px;
-}
-
-button {
-  cursor: default;
-  padding: 5px 12px;
-  border-radius: 3px;
-  font-size: 14px;
-  color: #333;
-  border: none;
-  background-color: #f8f9fa;
-}
-
-.is_showMore {
-  cursor: pointer;
-  background-color: #0d6efd;
-  border: 1px #0d6efd solid;
-  color: #fff;
-  transition: all .3s;
-}
-
-.is_showMore:hover {
-  opacity: .85;
-  color: #fff;
-}
-
 .is_loading {
   pointer-events: none;
-}
-
-a {
-  text-decoration: none;
-}
-
-p,
-span {
-  color: #333;
-}
-
-span {
-  opacity: .8;
-}
-
-.profileImage {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  cursor: pointer;
-}
-
-.tweet-text {
-  color: #333;
-  white-space: pre-wrap;
 }
 
 img {

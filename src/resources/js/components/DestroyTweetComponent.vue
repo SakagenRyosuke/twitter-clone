@@ -53,7 +53,6 @@ export default {
 
 .tweet:hover {
   opacity: .85;
-  color: #fff;
 }
 
 .is_loading {

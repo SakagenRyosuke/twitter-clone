@@ -20,16 +20,8 @@
       </router-link>
     </div>
     <div class="ms-5 buttons mb-4">
-      <div>
-        <button disabled>
-          <img v-if="is_favo" :class="is_favo ? 'is_favo' : ''" src="/images/heart.svg" alt="heart">
-        </button>
-      </div>
-      <div>
-        <button disabled>
-          <img v-if="is_retweet" :class="is_retweet ? 'is_retweet' : ''" src="/images/retweet.svg" alt="retweet">
-        </button>
-      </div>
+      <Favorite v-if="tweet" :isFavorite="isFavorite" :tweetId="tweet.id"></Favorite>
+      <Retweet v-if="tweet" :isRetweet="isRetweet" :tweetId="tweet.id"></Retweet>
       <div>
         <button disabled>
           <img src="/images/comment.svg" alt="comment">
@@ -42,18 +34,24 @@
 </template>
 <script>
 import { ref } from 'vue';
+import Favorite from './FavoriteComponent.vue';
+import Retweet from './RetweetComponent.vue';
 import UpdateTweet from './UpdateTweetComponent.vue';
 import DestroyTweet from './DestroyTweetComponent.vue';
 export default {
   props: {
     'tweet': Object,
-    'isLoginUser': Number
+    'isLoginUser': Number,
+    'isRetweet': Boolean,
+    'isFavorite': Boolean
   },
   components: {
+    Favorite,
+    Retweet,
     UpdateTweet,
-    DestroyTweet
+    DestroyTweet,
   },
-  setup() {
+  setup(props) {
     const is_favo = ref(true);
     const is_retweet = ref(true);
     return {
@@ -119,15 +117,5 @@ img {
   width: 20px;
   height: 20px;
   opacity: .8;
-}
-
-.buttons .is_favo {
-  filter: invert(15%) sepia(88%) saturate(7495%) hue-rotate(359deg) brightness(109%) contrast(108%);
-  opacity: 1;
-}
-
-.buttons .is_retweet {
-  filter: invert(76%) sepia(67%) saturate(262%) hue-rotate(101deg) brightness(103%) contrast(102%);
-  opacity: 1;
 }
 </style>

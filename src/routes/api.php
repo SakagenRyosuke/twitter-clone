@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\RetweetController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -80,10 +83,35 @@ Route::middleware('auth')->group(function () {
      * Tweetの編集
      * UpdateTweetComponent
      */
-    Route::post('/updateTweet', [TweetController::class, 'update']);
+    Route::post('/updateTweet/{tweetId}', [TweetController::class, 'update']);
     /**
      * Tweetの削除
      * DestroyTweetComponent
      */
-    Route::post('/destroyTweet', [TweetController::class, 'destroy']);
+    Route::post('/destroyTweet/{tweetId}', [TweetController::class, 'destroy']);
+    /**
+     * Tweetの状態を取得
+     * UserListDetailComponent
+     */
+    Route::get('/tweetStatus', [TweetController::class, 'getTweetStatus']);
+    /**
+     * ファボする
+     * TweetComponent
+     */
+    Route::post('/tweets/{tweetId}/favorite', [FavoriteController::class, 'favorite']);
+    /**
+     * ファボを解除する
+     * TweetComponent
+     */
+    Route::post('/tweets/{tweetId}/unfavorite', [FavoriteController::class, 'unfavorite']);
+    /**
+     * リツイートする
+     * TweetComponent
+     */
+    Route::post('/tweets/{tweetId}/retweet', [RetweetController::class, 'retweet']);
+    /**
+     * リツイートを解除する
+     * TweetComponent
+     */
+    Route::post('/tweets/{tweetId}/unretweet', [RetweetController::class, 'unretweet']);
 });

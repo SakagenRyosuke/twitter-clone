@@ -9,7 +9,7 @@
           <button class="form-header_button" disabled><img src="/images/xmark.svg" alt="xmark icon"
               @click="close"></button>
           <h2 class="ms-3">Create Tweet</h2>
-          <button id="store" class="ms-auto btn btn-primary form-header_store" type="submit">tweet</button>
+          <button class="ms-auto btn btn-primary form-header_store" type="submit">tweet</button>
         </div>
         <div class="tweetarea">
           <textarea name="tweet" maxlength="140" required></textarea>
@@ -20,7 +20,7 @@
 </template>
 <script>
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 function scroll_control(event) {
@@ -29,17 +29,10 @@ function scroll_control(event) {
 
 export default {
   setup() {
-    const authUserData = ref();
     const is_show = ref(false);
-    const is_loading = ref(true);
+    const is_loading = ref(false);
     const router = useRouter();
 
-    const getData = async () => {
-      is_loading.value = true;
-      const getData = await axios.get('/api/loginUser');
-      authUserData.value = getData.data;
-      is_loading.value = false;
-    }
     const open = () => {
       is_show.value = true;
       document.addEventListener('touchmove', scroll_control, { passive: false });
@@ -62,11 +55,7 @@ export default {
       is_loading.value = false;
       router.push({ path: '/home'});
     }
-    onMounted(() => {
-      getData()
-    })
     return {
-      authUserData,
       is_show,
       is_loading,
       open,
@@ -97,7 +86,6 @@ export default {
 
 .tweet:hover {
   opacity: .85;
-  color: #fff;
 }
 
 .content {
@@ -167,14 +155,6 @@ export default {
   border-radius: 30px;
   padding: 30px;
   border: solid #eee 1px;
-}
-
-.screenName input {
-  width: 100%;
-  height: 30px;
-  border-radius: 15px;
-  border: solid #333 1px;
-  padding-left: 10px;
 }
 
 .is_loading {
