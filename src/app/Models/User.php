@@ -67,8 +67,8 @@ class User extends Authenticatable
 
         if ($request->file('profileImage')) {
             $imageName = $request->file('profileImage')->hashName();
-            $user->profileImage = '/storage/' . $imageName;
-            $request->file('profileImage')->storeAs('public', $imageName);
+            $user->profileImage = '/storage/user/' . $imageName;
+            $request->file('profileImage')->storeAs('public/user', $imageName);
         }
 
         return $user->save();
