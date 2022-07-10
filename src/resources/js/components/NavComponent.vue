@@ -2,36 +2,24 @@
   <div class="fixed-top nav-content">
     <div class="d-flex flex-column p-3 bg-light nav-content">
       <router-link to="/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32">
-          <use xlink:href="#bootstrap"></use>
-        </svg>
-        <span class="fs-4">Twitter Clone</span>
+        <span class="fs-5">Twitter Clone</span>
       </router-link>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
           <router-link to="/home" class="nav-link link-dark" :class="{ 'active': $route.path === '/home' }">
-            <svg class="bi me-2" width="16" height="16">
-              <use xlink:href="#home"></use>
-            </svg>
             Home
           </router-link>
         </li>
         <li class="nav-item">
           <router-link to="/home/user-list" class="nav-link link-dark"
             :class="{ 'active': $route.path === '/home/user-list' }">
-            <svg class="bi me-2" width="16" height="16">
-              <use xlink:href="#home"></use>
-            </svg>
             User List
           </router-link>
         </li>
         <li class="nav-item">
           <router-link :to="'/home/user-profile/' + user.id" class="nav-link link-dark"
             :class="{ 'active': $route.path === '/home/user-profile/' + user.id }">
-            <svg class="bi me-2" width="16" height="16">
-              <use xlink:href="#home"></use>
-            </svg>
             Profile
           </router-link>
         </li>
@@ -44,11 +32,6 @@
           <strong>{{ user.screenName }}</strong>
         </a>
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-          <li><a class="dropdown-item" href="#">New project...</a></li>
-          <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
           <li><button class="dropdown-item" @click="logout">
               logout
             </button></li>
@@ -63,7 +46,7 @@ import { onMounted, ref } from 'vue';
 import CreateTweet from './CreateTweetComponent.vue';
 
 export default {
-    components: {
+  components: {
     CreateTweet
   },
   setup() {
@@ -93,7 +76,7 @@ export default {
 </script>
 <style scoped>
 .nav-content {
-  width: 280px;
+  width: 200px;
   height: 100%;
 }
 

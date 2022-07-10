@@ -3,11 +3,11 @@
     <div class="row justify-content-center">
       <div class="container col-md-12">
         <div class="my-3 p-3 bg-body rounded shadow-sm" v-show="user">
-          <div class="d-flex mb-3">
+          <div class="d-flex mb-3 profile">
             <div class="img me-5">
               <img class="rounded-circle w-100 h-100" v-if="user" :src="user.profileImage" alt="profileImage">
             </div>
-            <div class="d-flex align-items-end">
+            <div class="d-flex align-items-end counts">
               <div class="me-3 px-3 text-center">
                 <h2 class="fs-4" v-if="user">{{ tweetsCount }}</h2>
                 <p>Tweets</p>
@@ -162,5 +162,22 @@ li:hover {
 
 img {
   object-fit: cover;
+}
+
+@media only screen and (max-width:700px) {
+  .profile img, .img {
+    width: 75px !important;
+    height: 75px !important;
+  }
+  .img {
+    margin-right: 10px !important;
+  }
+  .counts div {
+    margin: 5px !important;
+    padding: 5px !important;
+  }
+  .profile h2, .profile p {
+    font-size: 14px !important;
+  }
 }
 </style>
