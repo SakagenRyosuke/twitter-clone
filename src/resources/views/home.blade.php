@@ -20,6 +20,7 @@
             box-sizing: 0;
         }
     </style>
+    <link rel="icon" href="/images/favicon.ico">
 </head>
 
 <body>
