@@ -8,7 +8,7 @@
         <div class="form-header d-flex">
           <button class="form-header_button" disabled><img src="/images/xmark.svg" alt="xmark icon"
               @click="close"></button>
-          <h2 class="ms-3">Create Comment</h2>
+          <h2 class="ms-3">Create Reply</h2>
           <button class="ms-auto btn btn-primary form-header_update" type="submit">comment</button>
         </div>
         <div class="commentarea">
@@ -56,7 +56,7 @@ export default {
       await axios.post(`/api/createComment/${props.tweetId}`, commentData);
       e.target.comment.value = "";
       is_loading.value = false;
-      router.push({ path: `/home/tweet/detail/${props.tweetId}`});
+      router.push({ path: `/home/tweet/detail/${props.tweetId}` });
     }
     return {
       is_show,
@@ -106,7 +106,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;
+  width: 80%;
   max-width: 600px;
   height: 400px;
   background-color: #fff;
