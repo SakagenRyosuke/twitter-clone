@@ -9,7 +9,7 @@
           <button class="form-header_button" disabled><img src="/images/xmark.svg" alt="xmark icon"
               @click="close"></button>
           <h2 class="ms-3">Create Reply</h2>
-          <button class="ms-auto btn btn-primary form-header_update" type="submit">comment</button>
+          <button class="ms-auto btn btn-primary form-header_update" type="submit">reply</button>
         </div>
         <div class="commentarea">
           <textarea name="comment" maxlength="140" required></textarea>
