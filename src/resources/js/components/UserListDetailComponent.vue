@@ -34,10 +34,9 @@
       <div class="container col-md-12" v-show="user, tweets">
         <ul class="ps-0">
           <li class="card" v-for="tweet in tweets">
-            <Tweet :tweet="tweet" :isLoginUser="isLoginUser"
-              :isFavorite="tweet.id === favoriteId ? isFavorite : favoriteIds.includes(tweet.id)"
-              :isRetweet="tweet.id === retweetId ? isRetweet : retweetIds.includes(tweet.id)"
-              @emitFavorite="emitFavorite" @emitRetweet="emitRetweet"></Tweet>
+            <Tweet :tweet="tweet" :isLoginUser="isLoginUser" :isFavorite="favoriteIds.includes(tweet.id)"
+              :isRetweet="retweetIds.includes(tweet.id)" @emitFavorite="emitFavorite" @emitRetweet="emitRetweet">
+            </Tweet>
           </li>
         </ul>
       </div>
@@ -73,10 +72,6 @@ export default {
     const page = ref(0);
     const favoriteIds = ref([]);
     const retweetIds = ref([]);
-    const favoriteId = ref();
-    const isFavorite = ref();
-    const retweetId = ref();
-    const isRetweet = ref();
 
     const getData = async () => {
       const getProfile = axios.get(`/api/userProfile/${props.id}`);
@@ -114,12 +109,20 @@ export default {
       }
     }
     const emitFavorite = (bool, userId) => {
-      favoriteId.value = userId;
-      isFavorite.value = bool;
+      if (bool) {
+        favoriteIds.value.push(userId);
+      } else {
+        const index = favoriteIds.value.indexOf(userId);
+        favoriteIds.value.splice(index, 1)
+      }
     }
     const emitRetweet = (bool, userId) => {
-      retweetId.value = userId;
-      isRetweet.value = bool;
+      if (bool) {
+        retweetIds.value.push(userId);
+      } else {
+        const index = retweetIds.value.indexOf(userId);
+        retweetIds.value.splice(index, 1)
+      }
     }
     const emitFollow = (bool, userId) => {
       is_follow.value = bool
@@ -146,11 +149,7 @@ export default {
       favoriteIds,
       retweetIds,
       emitFavorite,
-      favoriteId,
-      isFavorite,
       emitRetweet,
-      retweetId,
-      isRetweet,
       emitFollow
     }
   },

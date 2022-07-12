@@ -3,9 +3,8 @@
     <ul class="ps-0">
       <li class="card" v-for="tweet in tweets">
         <Tweet :tweet="tweet" :isLoginUser="authId === tweet.userId ? 1 : 0"
-          :isFavorite="tweet.id === favoriteId ? isFavorite : favoriteIds.includes(tweet.id)"
-          :isRetweet="tweet.id === retweetId ? isRetweet : retweetIds.includes(tweet.id)" @emitFavorite="emitFavorite"
-          @emitRetweet="emitRetweet"></Tweet>
+          :isFavorite="favoriteIds.includes(tweet.id)" :isRetweet="retweetIds.includes(tweet.id)"
+          @emitFavorite="emitFavorite" @emitRetweet="emitRetweet"></Tweet>
       </li>
     </ul>
   </div>
@@ -26,10 +25,6 @@ export default {
     const favoriteIds = ref([])
     const retweetIds = ref([])
     const authId = ref()
-    const favoriteId = ref();
-    const isFavorite = ref();
-    const retweetId = ref();
-    const isRetweet = ref();
 
     const getData = async () => {
       const getTweet = axios.get(`/api/timelines?page=${++page.value}`);
@@ -63,12 +58,20 @@ export default {
       }
     }
     const emitFavorite = (bool, userId) => {
-      favoriteId.value = userId;
-      isFavorite.value = bool;
+      if (bool) {
+        favoriteIds.value.push(userId);
+      } else {
+        const index = favoriteIds.value.indexOf(userId);
+        favoriteIds.value.splice(index, 1)
+      }
     }
     const emitRetweet = (bool, userId) => {
-      retweetId.value = userId;
-      isRetweet.value = bool;
+      if (bool) {
+        retweetIds.value.push(userId);
+      } else {
+        const index = retweetIds.value.indexOf(userId);
+        retweetIds.value.splice(index, 1)
+      }
     }
     onMounted(() => {
       getData(),
@@ -86,11 +89,7 @@ export default {
       retweetIds,
       authId,
       emitFavorite,
-      favoriteId,
-      isFavorite,
-      emitRetweet,
-      retweetId,
-      isRetweet
+      emitRetweet
     }
   },
 };
