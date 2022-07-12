@@ -63,8 +63,8 @@ export default {
     const uploadFile = (e) => {
       const file = e.target.files[0];
       if (typeof file != "undefined") {
-        if (file.size > 1024 * 1024 * 1) {
-          alert("ファイルサイズを1MB以下にしてください")
+        if (file.size > 1024 * 1024 * 20) {
+          alert("ファイルサイズを20MB以下にしてください")
         } else {
           url.value = URL.createObjectURL(file);
         }
