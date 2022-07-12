@@ -44,7 +44,7 @@ class RetweetController extends Controller
     public function unretweet(int $tweetId, Retweet $retweet, Timeline $timeline)
     {
         $retweet->unretweet($tweetId, Auth::id());
-        $timeline->destroyTimeline(Auth::id(), $tweetId, TweetStatus::TWEET_STATUS_IS_FAVORITE);
+        $timeline->destroyTimeline(Auth::id(), $tweetId, TweetStatus::TWEET_STATUS_IS_RETWEET);
     }
 
     /**

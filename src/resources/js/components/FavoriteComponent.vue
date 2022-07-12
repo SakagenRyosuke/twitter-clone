@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper">
-    <button class="tweet" @click="doFavorite">
-      <img :class="[is_favorite ? 'is_favorite' : '']" src="/images/heart.svg" alt="create tweet icon">
+    <button class="tweet" @click="execEmit">
+      <img :class="[props.isFavorite ? 'is_favorite' : '']" src="/images/heart.svg" alt="create tweet icon">
     </button>
   </div>
 </template>
 <script>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -14,10 +14,9 @@ export default {
     'isFavorite': Boolean,
     'tweetId': Number
   },
-  setup(props) {
+  setup(props, context) {
     const is_loading = ref(true)
-    const is_favorite = ref(props.isFavorite)
-
+    const is_favorite = ref()
     async function favorite() {
       try {
         await axios.post('/api/tweets/' + props.tweetId + '/favorite');
@@ -33,18 +32,17 @@ export default {
       }
     }
     const doFavorite = () => {
-      is_favorite.value = !is_favorite.value;
-      is_favorite.value ? favorite() : unfavorite();
+      props.isFavorite ? unfavorite() : favorite();
     }
-    onMounted(() => {
-      // 19行目の時点でpropsが反映されていない。（isFavorite）
-      setTimeout(() => { is_favorite.value = props.isFavorite }, 100);
-      is_loading.value = false;
-    })
+    const execEmit = () => {
+      doFavorite();
+      context.emit('emitFavorite', !props.isFavorite);
+    }
     return {
       is_loading,
       is_favorite,
-      doFavorite
+      execEmit,
+      props
     }
   }
 };

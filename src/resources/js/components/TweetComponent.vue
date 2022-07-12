@@ -24,8 +24,8 @@
       </router-link>
     </div>
     <div class="ms-5 buttons mb-4">
-      <Favorite v-if="tweet" :isFavorite="isFavorite" :tweetId="tweet.id"></Favorite>
-      <Retweet v-if="tweet" :isRetweet="isRetweet" :tweetId="tweet.id"></Retweet>
+      <Favorite v-if="tweet" :isFavorite="props.isFavorite" :tweetId="tweet.id" @emitFavorite="emitFavorite"></Favorite>
+      <Retweet v-if="tweet" :isRetweet="isRetweet" :tweetId="tweet.id" @emitRetweet="emitRetweet"></Retweet>
       <Comment v-if="tweet" :tweetId="tweet.id"></Comment>
       <UpdateTweet v-if="tweet" v-show="isLoginUser === 1" :tweetId="tweet.id" :tweetContent="tweet.text"></UpdateTweet>
       <DestroyTweet v-if="tweet" v-show="isLoginUser === 1" :tweetId="tweet.id"></DestroyTweet>
@@ -54,16 +54,22 @@ export default {
     DestroyTweet,
     Comment
   },
-  setup(props) {
+  setup(props, context) {
     const is_favo = ref(true);
     const is_retweet = ref(true);
     const userName = ref();
 
     const getName = async () => {
-      if (props.tweet.state != '0') {
+      if (props.tweet.state != '0' && props.tweet.state != undefined) {
         const nameData = await axios.get(`/api/userName/${props.tweet.timelineUserId}`);
         userName.value = nameData.data.name
       }
+    }
+    const emitFavorite = (params) => {
+      context.emit('emitFavorite', params, props.tweet.userId);
+    }
+    const emitRetweet = (params) => {
+      context.emit('emitRetweet', params, props.tweet.userId);
     }
     onMounted(() => {
       getName()
@@ -71,7 +77,10 @@ export default {
     return {
       is_favo,
       is_retweet,
-      userName
+      userName,
+      emitFavorite,
+      emitRetweet,
+      props
     }
   }
 };

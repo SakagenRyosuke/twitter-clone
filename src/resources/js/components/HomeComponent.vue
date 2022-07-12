@@ -3,7 +3,9 @@
     <ul class="ps-0">
       <li class="card" v-for="tweet in tweets">
         <Tweet :tweet="tweet" :isLoginUser="authId === tweet.userId ? 1 : 0"
-          :isFavorite="favoriteIds.includes(tweet.id)" :isRetweet="retweetIds.includes(tweet.id)"></Tweet>
+          :isFavorite="tweet.id === favoriteId ? isFavorite : favoriteIds.includes(tweet.id)"
+          :isRetweet="tweet.id === retweetId ? isRetweet : retweetIds.includes(tweet.id)" @emitFavorite="emitFavorite"
+          @emitRetweet="emitRetweet"></Tweet>
       </li>
     </ul>
   </div>
@@ -24,6 +26,10 @@ export default {
     const favoriteIds = ref([])
     const retweetIds = ref([])
     const authId = ref()
+    const favoriteId = ref();
+    const isFavorite = ref();
+    const retweetId = ref();
+    const isRetweet = ref();
 
     const getData = async () => {
       const getTweet = axios.get(`/api/timelines?page=${++page.value}`);
@@ -56,6 +62,14 @@ export default {
         is_loading.value = false;
       }
     }
+    const emitFavorite = (bool, userId) => {
+      favoriteId.value = userId;
+      isFavorite.value = bool;
+    }
+    const emitRetweet = (bool, userId) => {
+      retweetId.value = userId;
+      isRetweet.value = bool;
+    }
     onMounted(() => {
       getData(),
         window.addEventListener('scroll', () => {
@@ -70,7 +84,13 @@ export default {
       is_loading,
       favoriteIds,
       retweetIds,
-      authId
+      authId,
+      emitFavorite,
+      favoriteId,
+      isFavorite,
+      emitRetweet,
+      retweetId,
+      isRetweet
     }
   },
 };

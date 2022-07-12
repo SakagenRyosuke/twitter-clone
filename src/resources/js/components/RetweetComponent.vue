@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
-    <button class="tweet" @click="doRetweet">
-      <img :class="[is_retweet ? 'is_retweet' : '']" src="/images/retweet.svg" alt="create tweet icon">
+    <button class="tweet" @click="execEmit">
+      <img :class="[props.isRetweet ? 'is_retweet' : '']" src="/images/retweet.svg" alt="create tweet icon">
     </button>
   </div>
 </template>
@@ -14,7 +14,7 @@ export default {
     'isRetweet': Boolean,
     'tweetId': Number
   },
-  setup(props) {
+  setup(props, context) {
     const is_loading = ref(true)
     const is_retweet = ref(props.isRetweet)
 
@@ -33,18 +33,17 @@ export default {
       }
     }
     const doRetweet = () => {
-      is_retweet.value = !is_retweet.value;
-      is_retweet.value ? retweet() : unretweet();
+      props.isRetweet ? unretweet() : retweet();
     }
-    onMounted(() => {
-      // 19行目の時点でpropsが反映されていない。（isRetweet）
-      setTimeout(() => { is_retweet.value = props.isRetweet }, 100);
-      is_loading.value = false;
-    })
+    const execEmit = () => {
+      doRetweet();
+      context.emit('emitRetweet', !props.isRetweet);
+    }
     return {
       is_loading,
       is_retweet,
-      doRetweet
+      execEmit,
+      props
     }
   }
 };

@@ -33,7 +33,10 @@
       <div class="container col-md-12" v-show="user, tweets">
         <ul class="ps-0">
           <li class="card" v-for="tweet in tweets">
-            <Tweet :tweet="tweet" :isLoginUser="isLoginUser" :isFavorite="favoriteIds.includes(tweet.id)" :isRetweet="retweetIds.includes(tweet.id)"></Tweet>
+            <Tweet :tweet="tweet" :isLoginUser="isLoginUser"
+              :isFavorite="tweet.id === favoriteId ? isFavorite : favoriteIds.includes(tweet.id)"
+              :isRetweet="tweet.id === retweetId ? isRetweet : retweetIds.includes(tweet.id)"
+              @emitFavorite="emitFavorite" @emitRetweet="emitRetweet"></Tweet>
           </li>
         </ul>
       </div>
@@ -69,6 +72,10 @@ export default {
     const page = ref(0);
     const favoriteIds = ref([]);
     const retweetIds = ref([]);
+    const favoriteId = ref();
+    const isFavorite = ref();
+    const retweetId = ref();
+    const isRetweet = ref();
 
     const getData = async () => {
       const getProfile = axios.get(`/api/userProfile/${props.id}`);
@@ -105,6 +112,14 @@ export default {
         is_loading.value = false;
       }
     }
+    const emitFavorite = (bool, userId) => {
+      favoriteId.value = userId;
+      isFavorite.value = bool;
+    }
+    const emitRetweet = (bool, userId) => {
+      retweetId.value = userId;
+      isRetweet.value = bool;
+    }
     onMounted(() => {
       getData(),
         window.addEventListener('scroll', () => {
@@ -125,7 +140,13 @@ export default {
       tweetsCount,
       is_loading,
       favoriteIds,
-      retweetIds
+      retweetIds,
+      emitFavorite,
+      favoriteId,
+      isFavorite,
+      emitRetweet,
+      retweetId,
+      isRetweet
     }
   },
   watch: {
@@ -166,18 +187,24 @@ img {
 }
 
 @media only screen and (max-width:700px) {
-  .profile img, .img {
+
+  .profile img,
+  .img {
     width: 75px !important;
     height: 75px !important;
   }
+
   .img {
     margin-right: 10px !important;
   }
+
   .counts div {
     margin: 5px !important;
     padding: 5px !important;
   }
-  .profile h2, .profile p {
+
+  .profile h2,
+  .profile p {
     font-size: 14px !important;
   }
 }
