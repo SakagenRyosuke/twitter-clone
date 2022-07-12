@@ -22,8 +22,9 @@ class UserController extends Controller
     }
 
     /**
-     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をarrayで返す
-     *
+     * ユーザー情報の取得
+     * 
+     * @param \App\Models\User $user
      * @return array
      */
     public function index(User $user): array
@@ -47,20 +48,22 @@ class UserController extends Controller
     /**
      * ログアウトする
      * 
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
     }
 
     /**
      * 引数と一致するidのユーザー情報を取得してその値を返す
      * 
+     * @param \App\Models\User $user
+     * @param \App\Models\Follow $follow
+     * @param \App\Models\Tweet $tweet
      * @return array<object, int>
      */
     public function show(User $user, Follow $follow, Tweet $tweet): array
@@ -78,16 +81,19 @@ class UserController extends Controller
     /**
      * ログインユーザーかどうかを0,1で返す
      * 
+     * @param int $user
      * @return int
      */
     public function isLoginUser(int $user): int
     {
-        return  Auth::id() == $user ? true : false;
+        return  Auth::id() == $user ? 1 : 0;
     }
 
     /**
      * ログインユーザーのプロフィールを編集する
      * 
+     * @param \App\Http\Requests\User\PostRequest $request
+     * @param \App\Models\User $user
      * @return bool
      */
     public function update(PostRequest $request, User $user): bool
@@ -107,7 +113,10 @@ class UserController extends Controller
 
     /**
      * 名前取得
-     * @return String
+     * 
+     * @param int $userId
+     * @param \App\Models\User $user
+     * @return string
      */
     public function getUserName(int $userId, User $user): string
     {

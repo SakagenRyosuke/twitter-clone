@@ -20,11 +20,11 @@ class FollowController extends Controller
     /**
      * ログインユーザーがフォローしている人を取得する
      * 
-     * followingIdがログインIdであるレコードをfollowsテーブルから取得してその値を返す
-     * 
+     * @param int $id
+     * @param \App\Models\Follow $follow
      * @return object
      */
-    public function getFollowList(int $id, Follow $follow): int
+    public function getFollowList(int $id, Follow $follow): object
     {
         return $follow->getFollowList($id, Auth::id());
     }
@@ -32,8 +32,8 @@ class FollowController extends Controller
     /**
      * フォローする
      * 
-     * レコードを作成しfollowsテーブルに追加する
-     * 
+     * @param int $id
+     * @param \App\Models\Follow $follow
      * @return void
      */
     public function follow(int $id, Follow $follow)
@@ -44,8 +44,8 @@ class FollowController extends Controller
     /**
      * フォロー解除する
      * 
-     * followsテーブルに検索をかけて、一致したものがあった場合レコードをデリートする
-     * 
+     * @param int $id
+     * @param \App\Models\Follow $follow
      * @return void
      */
     public function unfollow(int $id, Follow $follow)
@@ -56,6 +56,7 @@ class FollowController extends Controller
     /**
      * フォローリストの取得
      * 
+     * @param \App\Models\Follow $follow
      * @return array
      */
     public function getFollowIds(Follow $follow): array

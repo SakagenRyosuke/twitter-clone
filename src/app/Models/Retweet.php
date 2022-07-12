@@ -14,9 +14,10 @@ class Retweet extends Model
     /**
      * リツイート数の取得
      * 
+     * @param int $authUserId
      * @return int
      */
-    public function getRetweetCount($authUserId): int
+    public function getRetweetCount(int $authUserId): int
     {
         return $this->where('userId', $authUserId)->count();
     }
@@ -24,6 +25,8 @@ class Retweet extends Model
     /**
      * リツイートする
      * 
+     * @param int $tweetId
+     * @param int $authUserId
      * @return void
      */
     public function retweet(int $tweetId, int $authUserId)
@@ -37,6 +40,8 @@ class Retweet extends Model
     /**
      * リツイートを解除する
      * 
+     * @param int $tweetId
+     * @param int $authUserId
      * @return void
      */
     public function unretweet(int $tweetId, int $authUserId)
@@ -52,21 +57,25 @@ class Retweet extends Model
     /**
      * リツイートリストの取得
      * 
+     * @param int $authUserId
      * @return array
      */
     public function getRetweetIds(int $authUserId): array
     {
-        $retweetIdsData = $this->where('userId', $authUserId)->get('tweetId')->pluck('tweetId')->toArray();
+        $retweetIdsData = $this->where('userId', $authUserId)
+            ->get('tweetId')->pluck('tweetId')->toArray();
         return array_map('intval', $retweetIdsData);
     }
 
     /**
      * リツイートしているか取得する
      * 
+     * @param int $tweetId
      * @return int
      */
     public function getIsRetweet(int $tweetId): int
     {
-        return $this->where('tweetId', $tweetId)->exists() == true ? 1 : 0;
+        return $this->where('tweetId', $tweetId)
+            ->exists() == true ? 1 : 0;
     }
 }

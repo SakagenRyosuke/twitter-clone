@@ -16,20 +16,22 @@ class Tweet extends Model
     /**
      * tweet単体の取得
      * 
+     * @param int $tweetId
      * @return object
      */
     public function getTweet(int $tweetId): object
     {
         return DB::table('tweets')
-        ->where('tweets.id', $tweetId)
-        ->join('users', 'tweets.userId', '=', 'users.id')
-        ->select('users.name', 'users.screenName', 'users.profileImage', 'tweets.*')
-        ->first();
+            ->where('tweets.id', $tweetId)
+            ->join('users', 'tweets.userId', '=', 'users.id')
+            ->select('users.name', 'users.screenName', 'users.profileImage', 'tweets.*')
+            ->first();
     }
 
     /**
      * tweet数の取得
      * 
+     * @param int $id
      * @return int
      */
     public function getTweetCount(int $id): int
@@ -42,7 +44,9 @@ class Tweet extends Model
      * 
      * Timelineに追加するためにTweetIdをリターンする
      * 
-     *  @return int
+     * @param int $authId
+     * @param object $request
+     * @return int
      */
     public function createTweet(int $authId, object $request): int
     {
@@ -55,29 +59,38 @@ class Tweet extends Model
 
     /**
      * ツイートの編集
+     * 
+     * @param int $tweetId
+     * @param object $request
+     * @param int $authId
+     * @return bool
      */
     public function updateTweet(int $tweetId, object $request, int $authId): bool
     {
         $tweet = $this->where('id', $tweetId)->first();
 
-        if($tweet->userId == $authId) {
+        if ($tweet->userId == $authId) {
             $tweet->text = $request->tweet;
             return $tweet->save();
-        }else {
+        } else {
             return false;
         }
     }
 
     /**
      * ツイートの削除
+     * 
+     * @param int $tweetId
+     * @param int $authId
+     * @return bool
      */
     public function destroyTweet(int $tweetId, int $authId): bool
     {
         $tweet = $this->where('id', $tweetId)->first();
-        
-        if($tweet->userId == $authId) {
+
+        if ($tweet->userId == $authId) {
             return $tweet->delete();
-        }else {
+        } else {
             return false;
         }
     }

@@ -8,12 +8,26 @@ use Illuminate\Support\Facades\Auth;
 
 class TimelineController extends Controller
 {
-    public function getTimeline(Timeline $timeline, int $userId)
+    /**
+     * プロフィール用のタイムライン取得
+     * 
+     * @param \App\Models\Timeline $timeline
+     * @param int $userId
+     * @return object
+     */
+    public function getTimeline(Timeline $timeline, int $userId): object
     {
         return $timeline->getTimeline($userId);
     }
 
-    public function getTimelines(Timeline $timeline, Follow $follow)
+    /**
+     * ホーム用のタイムライン取得
+     * 
+     * @param \App\Models\Timeline $timeline
+     * @param \App\Models\Follow $follow
+     * @return object
+     */
+    public function getTimelines(Timeline $timeline, Follow $follow): object
     {
         $timelineIds = $follow->getFollowIds(Auth::id());
         array_push($timelineIds, Auth::id());

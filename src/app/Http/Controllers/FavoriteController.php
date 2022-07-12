@@ -22,9 +22,11 @@ class FavoriteController extends Controller
     /**
      * ファボしているツイートを取得する
      * 
+     * @param int $id
+     * @param \App\Models\Favorite $favorite
      * @return object
      */
-    public function getFavoriteList(int $id, Favorite $favorite): int
+    public function getFavoriteList(int $id, Favorite $favorite): object
     {
         return $favorite->getFavoriteList($id, Auth::id());
     }
@@ -32,6 +34,9 @@ class FavoriteController extends Controller
     /**
      * ファボする
      * 
+     * @param int $tweetId
+     * @param \App\Models\Favorite $favorite
+     * @param \App\Models\Timeline $timeline
      * @return void
      */
     public function favorite(int $tweetId, Favorite $favorite, Timeline $timeline)
@@ -43,6 +48,9 @@ class FavoriteController extends Controller
     /**
      * ファボを解除する
      * 
+     * @param int $tweetId
+     * @param \App\Models\Favorite $favorite
+     * @param \App\Models\Timeline $timeline
      * @return void
      */
     public function unfavorite(int $tweetId, Favorite $favorite, Timeline $timeline)
@@ -54,6 +62,7 @@ class FavoriteController extends Controller
     /**
      * ファボリストの取得
      * 
+     * @param \App\Models\Favorite $favorite
      * @return array
      */
     public function getFavoriteIds(Favorite $favorite): array

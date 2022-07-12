@@ -16,22 +16,28 @@ class Comment extends Model
     /**
      * ツイートごとのcomment一覧を取得
      * 
+     * @param int $tweetId
      * @return object
      */
     public function getComments(int $tweetId): object
     {
         return DB::table('comments')
-        ->where('comments.tweetId', $tweetId)
-        ->join('users', 'comments.userId', '=', 'users.id')
-        ->select('users.*', 'comments.*')
-        ->orderBy('comments.created_at', 'desc')
-        ->paginate(Paginate::NUM_TWEET_PER_PAGE);
+            ->where('comments.tweetId', $tweetId)
+            ->join('users', 'comments.userId', '=', 'users.id')
+            ->select('users.*', 'comments.*')
+            ->orderBy('comments.created_at', 'desc')
+            ->paginate(Paginate::NUM_TWEET_PER_PAGE);
     }
 
     /**
      * Commentの作成
+     * 
+     * @param int $authId
+     * @param object $request
+     * @param int $tweetId
+     * @return bool
      */
-    public function createComment(int $authId, object $request, int $tweetId)
+    public function createComment(int $authId, object $request, int $tweetId): bool
     {
         $this->userId = $authId;
         $this->tweetId = $tweetId;

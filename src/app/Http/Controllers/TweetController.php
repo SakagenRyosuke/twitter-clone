@@ -16,7 +16,9 @@ class TweetController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Tweet $tweet
+     * @param \App\Models\Timeline $timeline
      * @return \Illuminate\Http\Response
      */
     public function store(PostRequest $request, Tweet $tweet, Timeline $timeline)
@@ -30,6 +32,8 @@ class TweetController extends Controller
      * 
      * ファボリストとリツイートリストの取得
      * 
+     * @param \App\Models\Favorite $favorite
+     * @param \App\Models\Retweet $retweet
      * @return array
      */
     public function getTweetStatus(Favorite $favorite, Retweet $retweet): array
@@ -46,9 +50,11 @@ class TweetController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @param int $tweetId
+     * @param \App\Models\Tweet $tweet
+     * @return bool
      */
     public function update(PostRequest $request, int $tweetId, Tweet $tweet): bool
     {
@@ -58,8 +64,10 @@ class TweetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @param int $tweetId
+     * @param \App\Models\Tweet $tweet
+     * @return bool
      */
     public function destroy(int $tweetId, Tweet $tweet): bool
     {
@@ -69,6 +77,10 @@ class TweetController extends Controller
     /**
      * Tweet単体の情報と状態を取得
      *
+     * @param int $tweetId
+     * @param \App\Models\Tweet $tweet
+     * @param \App\Models\Favorite $favorite
+     * @param \App\Models\Retweet $retweet
      * @return array
      */
     public function show(int $tweetId, Tweet $tweet, Favorite $favorite, Retweet $retweet): array

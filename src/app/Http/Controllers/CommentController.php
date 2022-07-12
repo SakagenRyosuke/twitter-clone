@@ -11,6 +11,8 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param \App\Models\Comment $comment
+     * @param int $tweetId
      * @return object
      */
     public function index(Comment $comment, int $tweetId): object
@@ -21,10 +23,12 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Comment\PostRequest  $request
+     * @param \App\Http\Requests\Comment\PostRequest $request
+     * @param int $tweetId
+     * @param \App\Models\Comment $comment
      * @return bool
      */
-    public function store(int $tweetId, PostRequest $request,Comment $comment): bool
+    public function store(int $tweetId, PostRequest $request, Comment $comment): bool
     {
         return $comment->createComment(Auth::id(), $request, $tweetId);
     }

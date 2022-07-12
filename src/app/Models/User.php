@@ -46,7 +46,8 @@ class User extends Authenticatable
 
     /**
      * ユーザーリストの取得
-     *
+     * 
+     * @param int $authUserId
      * @return object
      */
     public function getUserList(int $authUserId): object
@@ -58,17 +59,22 @@ class User extends Authenticatable
 
     /**
      * 認証ユーザーのみユーザー情報更新
+     * 
+     * @param int $authId
+     * @param object $request
+     * @return bool
      */
     public function updateUser(int $authId, object $request): bool
     {
         $user = $this->where('id', $authId)->first();
-
         $user->screenName = $request->screenName;
 
         if ($request->file('profileImage')) {
-            $imageName = $request->file('profileImage')->hashName();
+            $imageName = $request->file('profileImage')
+                ->hashName();
             $user->profileImage = '/storage/user/' . $imageName;
-            $request->file('profileImage')->storeAs('public/user', $imageName);
+            $request->file('profileImage')
+                ->storeAs('public/user', $imageName);
         }
 
         return $user->save();
@@ -76,10 +82,13 @@ class User extends Authenticatable
 
     /**
      * 名前取得
-     * @return String
+     * 
+     * @param int $userId
+     * @return string
      */
     public function getUserName(int $userId): string
     {
-        return $this->where('id', $userId)->select('name')->first();
+        return $this->where('id', $userId)
+            ->select('name')->first();
     }
 }

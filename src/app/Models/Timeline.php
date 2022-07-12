@@ -16,9 +16,10 @@ class Timeline extends Model
     /**
      * プロフィール画面用タイムライン取得
      * 
+     * @param int $userId
      * @return object
      */
-    function getTimeline(int $userId)
+    function getTimeline(int $userId): object
     {
         return DB::table('timelines')
             ->where('timelines.userId', $userId)
@@ -39,6 +40,7 @@ class Timeline extends Model
     /**
      * ホーム画面用タイムライン取得
      * 
+     * @param array $timelineIds
      * @return object
      */
     function getTimelines(array $timelineIds): object
@@ -59,6 +61,14 @@ class Timeline extends Model
             ->paginate(Paginate::NUM_TWEET_PER_PAGE);
     }
 
+    /**
+     * タイムラインの作成
+     * 
+     * @param int $authId
+     * @param int $tweetId
+     * @param string $state
+     * @return void
+     */
     public function createTimeline(int $authId, int $tweetId, string $state)
     {
         $this->firstOrCreate([
@@ -68,6 +78,14 @@ class Timeline extends Model
         ]);
     }
 
+    /**
+     * タイムラインの削除
+     * 
+     * @param int $authId
+     * @param int $tweetId
+     * @param string $state
+     * @return void
+     */
     public function destroyTimeline(int $authId, int $tweetId, string $state)
     {
         $this->where([['userId', $authId], ['tweetId', $tweetId], ['state', $state]])

@@ -20,18 +20,11 @@ class RetweetController extends Controller
     }
 
     /**
-     * リツイートしているツイートを取得する
-     * 
-     * @return int
-     */
-    public function getRetweetList(int $id, Retweet $retweet)
-    {
-        return $retweet->getRetweetList($id, Auth::id());
-    }
-
-    /**
      * リツイートする
      * 
+     * @param int $tweetId
+     * @param \App\Models\Retweet $retweet
+     * @param \App\Models\Timeline $timeline
      * @return void
      */
     public function retweet(int $tweetId, Retweet $retweet, Timeline $timeline)
@@ -43,6 +36,9 @@ class RetweetController extends Controller
     /**
      * リツイートを解除する
      * 
+     * @param int $tweetId
+     * @param \App\Models\Retweet $retweet
+     * @param \App\Models\Timeline $timeline
      * @return void
      */
     public function unretweet(int $tweetId, Retweet $retweet, Timeline $timeline)
@@ -54,6 +50,7 @@ class RetweetController extends Controller
     /**
      * リツイートリストの取得
      * 
+     * @param \App\Models\Retweet $retweet
      * @return array
      */
     public function getRetweetIds(Retweet $retweet): array
