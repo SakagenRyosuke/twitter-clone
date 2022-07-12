@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Consts\TweetStatus;
 use App\Models\Favorite;
-use Illuminate\Http\Request;
+use App\Models\Timeline;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
@@ -33,9 +34,10 @@ class FavoriteController extends Controller
      * 
      * @return void
      */
-    public function favorite(int $tweetId, Favorite $favorite)
+    public function favorite(int $tweetId, Favorite $favorite, Timeline $timeline)
     {
         $favorite->favorite($tweetId, Auth::id());
+        $timeline->createTimeline(Auth::id(), $tweetId, TweetStatus::TWEET_STATUS_IS_FAVORITE);
     }
 
     /**
@@ -43,9 +45,10 @@ class FavoriteController extends Controller
      * 
      * @return void
      */
-    public function unfavorite(int $tweetId, Favorite $favorite)
+    public function unfavorite(int $tweetId, Favorite $favorite, Timeline $timeline)
     {
         $favorite->unfavorite($tweetId, Auth::id());
+        $timeline->destroyTimeline(Auth::id(), $tweetId, TweetStatus::TWEET_STATUS_IS_FAVORITE);
     }
 
     /**

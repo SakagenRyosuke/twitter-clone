@@ -2,34 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Consts\TweetStatus;
 use App\Http\Requests\Tweet\PostRequest;
 use App\Models\Favorite;
 use App\Models\Follow;
 use App\Models\Retweet;
+use App\Models\Timeline;
 use App\Models\Tweet;
 use Illuminate\Support\Facades\Auth;
 
 class TweetController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(int $id, Tweet $tweet): object
-    {
-        return $tweet->getTimeLine($id);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request, Tweet $tweet): bool
+    public function store(PostRequest $request, Tweet $tweet, Timeline $timeline)
     {
-        return $tweet->createTweet(Auth::id(), $request);
+        $tweetId = $tweet->createTweet(Auth::id(), $request);
+        return $timeline->createTimeline(Auth::id(), $tweetId, TweetStatus::TWEET_STATUS_IS_VANILLA);
     }
 
     /**
@@ -85,17 +78,5 @@ class TweetController extends Controller
             'isFavorite' => $favorite->getIsFavorite($tweetId),
             'isRetweet' => $retweet->getIsRetweet($tweetId)
         ];
-    }
-
-    /**
-     * home用のタイムラインを取得
-     * 
-     * @return object
-     */
-    public function getTimelines(Tweet $tweet, Follow $follow): object
-    {
-        $list = $follow->getFollowIds(Auth::id());
-        array_push($list, Auth::id());
-        return $tweet->getTimeLines($list);
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Consts\TweetStatus;
 use App\Models\Retweet;
-use Illuminate\Http\Request;
+use App\Models\Timeline;
 use Illuminate\Support\Facades\Auth;
 
 class RetweetController extends Controller
@@ -23,7 +24,7 @@ class RetweetController extends Controller
      * 
      * @return int
      */
-    public function getRetweetList(int $id, Retweet $retweet): int
+    public function getRetweetList(int $id, Retweet $retweet)
     {
         return $retweet->getRetweetList($id, Auth::id());
     }
@@ -33,9 +34,10 @@ class RetweetController extends Controller
      * 
      * @return void
      */
-    public function retweet(int $tweetId, Retweet $retweet)
+    public function retweet(int $tweetId, Retweet $retweet, Timeline $timeline)
     {
         $retweet->retweet($tweetId, Auth::id());
+        $timeline->createTimeline(Auth::id(), $tweetId, TweetStatus::TWEET_STATUS_IS_RETWEET);
     }
 
     /**
@@ -43,9 +45,10 @@ class RetweetController extends Controller
      * 
      * @return void
      */
-    public function unretweet(int $tweetId, Retweet $retweet)
+    public function unretweet(int $tweetId, Retweet $retweet, Timeline $timeline)
     {
-        $retweet->retweet($tweetId, Auth::id());
+        $retweet->unretweet($tweetId, Auth::id());
+        $timeline->destroyTimeline(Auth::id(), $tweetId, TweetStatus::TWEET_STATUS_IS_FAVORITE);
     }
 
     /**
