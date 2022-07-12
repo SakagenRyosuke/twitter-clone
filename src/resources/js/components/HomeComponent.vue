@@ -12,6 +12,7 @@
 import { onMounted, ref } from 'vue';
 import Tweet from './TweetComponent.vue';
 import axios from 'axios';
+
 export default {
   components: {
     Tweet

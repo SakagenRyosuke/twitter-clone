@@ -45,7 +45,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をobjectで返す
+     * ユーザーリストの取得
      *
      * @return object
      */
@@ -72,5 +72,14 @@ class User extends Authenticatable
         }
 
         return $user->save();
+    }
+
+    /**
+     * 名前取得
+     * @return String
+     */
+    public function getUserName(int $userId): string
+    {
+        return $this->where('id', $userId)->select('name')->first();
     }
 }

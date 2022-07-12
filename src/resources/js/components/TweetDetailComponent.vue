@@ -34,6 +34,7 @@
 <script>
 import { onMounted, ref } from 'vue';
 import Tweet from './TweetComponent.vue';
+
 export default {
   props: {
     id: String

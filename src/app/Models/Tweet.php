@@ -28,36 +28,6 @@ class Tweet extends Model
     }
 
     /**
-     * ユーザごとのtweet一覧を取得
-     * 
-     * @return object
-     */
-    public function getTimeLine(int $id): object
-    {
-        return DB::table('tweets')
-        ->where('tweets.userId', $id)
-        ->join('users', 'tweets.userId', '=', 'users.id')
-        ->select('users.name', 'users.screenName', 'users.profileImage', 'tweets.*')
-        ->orderBy('tweets.created_at', 'desc')
-        ->paginate(Paginate::NUM_TWEET_PER_PAGE);
-    }
-
-    /**
-     * タイムラインを取得
-     * 
-     * @return object
-     */
-    public function getTimeLines(array $ids): object
-    {
-        return DB::table('users')
-        ->whereIn('users.id', $ids)
-        ->join('tweets', 'users.id', '=', 'tweets.userId')
-        ->select('users.*', 'tweets.*')
-        ->orderBy('tweets.created_at', 'desc')
-        ->paginate(Paginate::NUM_TWEET_PER_PAGE);
-    }
-
-    /**
      * tweet数の取得
      * 
      * @return int
@@ -69,13 +39,18 @@ class Tweet extends Model
 
     /**
      * Tweet作成
+     * 
+     * Timelineに追加するためにTweetIdをリターンする
+     * 
+     *  @return int
      */
-    public function createTweet(int $authId, object $request)
+    public function createTweet(int $authId, object $request): int
     {
         $this->userId = $authId;
         $this->text = $request->tweet;
-
-        return $this->save();
+        $test = $this;
+        $this->save();
+        return $test->id;
     }
 
     /**

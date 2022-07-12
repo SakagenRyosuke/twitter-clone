@@ -22,16 +22,6 @@ class Favorite extends Model
         return $this->where('tweetId', $tweetId)->count();
     }
 
-    // /**
-    //  * authUserがファボしているか取得
-    //  * 
-    //  * @return int
-    //  */
-    // public function isFavorite(int $tweetId, int $authUserId): int
-    // {
-    //     return $this->where('userId', $authUserId)->where('tweetId', $tweetId)->exists() == true ? 1 : 0;
-    // }
-
     /**
      * ファボする
      * 

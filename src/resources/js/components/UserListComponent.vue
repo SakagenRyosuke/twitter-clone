@@ -27,6 +27,7 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import FollowButton from './FollowButtonComponent.vue';
+
 export default {
   components: {
     FollowButton

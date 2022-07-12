@@ -83,8 +83,7 @@ export default {
         userData.append("profileImage", profileImage);
       }
       userData.append("screenName", screenName);
-      const test = await axios.post('/api/editUser', userData);
-      console.log(test.data);
+      await axios.post('/api/editUser', userData);
       location.reload();
     }
     onMounted(() => {

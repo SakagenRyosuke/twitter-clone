@@ -22,16 +22,6 @@ class Retweet extends Model
     }
 
     /**
-     * authUserがリツイートしているか取得
-     * 
-     * @return int
-     */
-    public function isRetweet(int $tweetId, int $authUserId): int
-    {
-        return $this->where('userId', $authUserId)->where('tweetId', $tweetId)->exists() == true ? 1 : 0;
-    }
-
-    /**
      * リツイートする
      * 
      * @return void
