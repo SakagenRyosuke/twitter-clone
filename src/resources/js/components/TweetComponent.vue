@@ -3,6 +3,10 @@
     <router-link :to="'/home/tweet/detail/' + tweet.id">
       <div class="card-haeder p-3">
         <div class="ms-5">
+          <div v-show="tweet.state != '0'">
+            <span v-show="tweet.state === '1'">{{ userName }}がいいねしました</span>
+            <span v-show="tweet.state === '2'">{{ userName }}がリツイートしました</span>
+          </div>
           <div class="d-flex">
             <p>{{ tweet.screenName }}</p>
             <span class="ms-2">{{ tweet.name }}</span>
@@ -29,12 +33,13 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Favorite from './FavoriteComponent.vue';
 import Retweet from './RetweetComponent.vue';
 import UpdateTweet from './UpdateTweetComponent.vue';
 import DestroyTweet from './DestroyTweetComponent.vue';
 import Comment from './CommentComponent.vue';
+
 export default {
   props: {
     'tweet': Object,
@@ -52,9 +57,21 @@ export default {
   setup(props) {
     const is_favo = ref(true);
     const is_retweet = ref(true);
+    const userName = ref();
+
+    const getName = async () => {
+      if (props.tweet.state != '0') {
+        const nameData = await axios.get(`/api/userName/${props.tweet.timelineUserId}`);
+        userName.value = nameData.data.name
+      }
+    }
+    onMounted(() => {
+      getName()
+    })
     return {
       is_favo,
-      is_retweet
+      is_retweet,
+      userName
     }
   }
 };
@@ -103,7 +120,7 @@ img {
   cursor: pointer;
 }
 
-.buttons div  {
+.buttons div {
   width: 20px;
   height: 20px;
   margin-right: 25px;

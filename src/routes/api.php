@@ -4,6 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\RetweetController;
+use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -56,10 +57,15 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('/authId', [UserController::class, 'getAuthId']);
     /**
+     * userNameの取得
+     * TweetComponent
+     */
+    Route::get('/userName/{userId}', [UserController::class, 'getUserName']);
+    /**
      * idが引数と一致するユーザーのtweetを取得
      * UserListDetailComponent
      */
-    Route::get('/timeLine/{id}', [TweetController::class, 'index']);
+    Route::get('/timeline/{userId}', [TimelineController::class, 'getTimeline']);
     /**
      * ログインユーザーのフォローリストの取得
      * FollowButtonComponent
@@ -139,5 +145,5 @@ Route::middleware('auth')->group(function () {
      * Comment一覧の取得
      * TweetDetailComponent
      */
-    Route::get('/timelines', [TweetController::class, 'getTimelines']);
+    Route::get('/timelines', [TimelineController::class, 'getTimelines']);
 });

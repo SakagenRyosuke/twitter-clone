@@ -104,4 +104,13 @@ class UserController extends Controller
     {
         return Auth::id();
     }
+
+    /**
+     * 名前取得
+     * @return String
+     */
+    public function getUserName(int $userId, User $user): string
+    {
+        return $user->getUserName($userId);
+    }
 }

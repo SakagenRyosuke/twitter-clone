@@ -46,6 +46,7 @@ import FollowButton from './FollowButtonComponent.vue';
 import EditButton from './EditButtonComponent.vue';
 import Tweet from './TweetComponent.vue';
 import axios from 'axios';
+
 export default {
   components: {
     FollowButton,
@@ -71,7 +72,7 @@ export default {
 
     const getData = async () => {
       const getProfile = axios.get(`/api/userProfile/${props.id}`);
-      const getTweet = axios.get(`/api/timeLine/${props.id}?page=${++page.value}`);
+      const getTweet = axios.get(`/api/timeline/${props.id}?page=${++page.value}`);
       const getTweetStatus = axios.get('/api/tweetStatus');
       const profileData = await getProfile;
       user.value = profileData.data.user;
@@ -95,7 +96,7 @@ export default {
     }
     async function addData() {
       is_loading.value = true;
-      const getTweet = axios.get(`/api/timeLine/${props.id}?page=${++page.value}`);
+      const getTweet = axios.get(`/api/timeline/${props.id}?page=${++page.value}`);
       const tweetData = await getTweet;
       if (tweetData.data.last_page >= page.value) {
         for (const element of tweetData.data.data) {
