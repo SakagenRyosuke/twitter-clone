@@ -14,7 +14,9 @@
               </div>
             </router-link>
             <div class="followButton">
-              <FollowButton :id="user.id" :isFollow="followIdsData.includes(user.id)"></FollowButton>
+              <!-- tweet.id === favoriteId ? isFavorite : favoriteIds.includes(tweet.id) -->
+              <FollowButton :id="user.id" :isFollow="user.id === followId ? isFollow : followIdsData.includes(user.id)" @emitFollow="emitFollow">
+              </FollowButton>
             </div>
           </li>
         </ul>
@@ -39,7 +41,8 @@ export default {
     const text = ref("Show More");
     const is_loading = ref(true);
     const followIdsData = ref([]);
-    const stop = ref(false);
+    const isFollow = ref();
+    const followId = ref();
 
     const getData = async () => {
       is_loading.value = true;
@@ -56,10 +59,14 @@ export default {
       followIdsData.value = followIds.data;
       getData();
     }
+    const emitFollow = (bool, userId) => {
+      followId.value = userId;
+      isFollow.value = bool;
+    }
     onMounted(() => {
       getFollowIds()
       window.addEventListener('scroll', () => {
-        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400 
+        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400
           && is_loading.value === false) {
           getData()
         }
@@ -71,7 +78,10 @@ export default {
       text,
       is_loading,
       followIdsData,
-      getData
+      getData,
+      emitFollow,
+      isFollow,
+      followId
     }
   }
 };

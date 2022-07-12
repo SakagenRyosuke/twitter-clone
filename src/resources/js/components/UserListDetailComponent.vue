@@ -26,7 +26,8 @@
             <h1 class="p-0 m-0 fs-2 text-center" v-if="user">{{ user.screenName }}</h1>
             <p class="p-0 m-0 text-center" v-if="user">{{ user.name }}</p>
           </div>
-          <FollowButton v-if="is_follow" v-show="isLoginUser === 0" :id="id" :isFollow="is_follow"></FollowButton>
+          <FollowButton v-show="isLoginUser === 0" :id="id" :isFollow="is_follow" @emitFollow="emitFollow">
+          </FollowButton>
           <EditButton v-show="isLoginUser === 1"></EditButton>
         </div>
       </div>
@@ -120,6 +121,9 @@ export default {
       retweetId.value = userId;
       isRetweet.value = bool;
     }
+    const emitFollow = (bool, userId) => {
+      is_follow.value = bool
+    }
     onMounted(() => {
       getData(),
         window.addEventListener('scroll', () => {
@@ -146,7 +150,8 @@ export default {
       isFavorite,
       emitRetweet,
       retweetId,
-      isRetweet
+      isRetweet,
+      emitFollow
     }
   },
   watch: {
