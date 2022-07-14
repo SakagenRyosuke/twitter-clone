@@ -108,19 +108,19 @@ export default {
         is_loading.value = false;
       }
     }
-    const emitFavorite = (bool, userId) => {
+    const emitFavorite = (bool, tweetId) => {
       if (bool) {
-        favoriteIds.value.push(userId);
+        favoriteIds.value.push(tweetId);
       } else {
-        const index = favoriteIds.value.indexOf(userId);
+        const index = favoriteIds.value.indexOf(tweetId);
         favoriteIds.value.splice(index, 1)
       }
     }
-    const emitRetweet = (bool, userId) => {
+    const emitRetweet = (bool, tweetId) => {
       if (bool) {
-        retweetIds.value.push(userId);
+        retweetIds.value.push(tweetId);
       } else {
-        const index = retweetIds.value.indexOf(userId);
+        const index = retweetIds.value.indexOf(tweetId);
         retweetIds.value.splice(index, 1)
       }
     }

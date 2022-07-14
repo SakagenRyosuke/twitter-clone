@@ -66,10 +66,10 @@ export default {
       }
     }
     const emitFavorite = (params) => {
-      context.emit('emitFavorite', params, props.tweet.userId);
+      context.emit('emitFavorite', params, props.tweet.id);
     }
     const emitRetweet = (params) => {
-      context.emit('emitRetweet', params, props.tweet.userId);
+      context.emit('emitRetweet', params, props.tweet.id);
     }
     onMounted(() => {
       getName()
