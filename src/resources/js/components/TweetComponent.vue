@@ -4,8 +4,8 @@
       <div class="card-haeder p-3">
         <div class="ms-5">
           <div v-show="tweet.state != '0'">
-            <span v-show="tweet.state === '1'">{{ userName }}がいいねしました</span>
-            <span v-show="tweet.state === '2'">{{ userName }}がリツイートしました</span>
+            <span v-show="tweet.state === tweetStatus.favorite">{{ userName }}がいいねしました</span>
+            <span v-show="tweet.state === tweetStatus.retweet">{{ userName }}がリツイートしました</span>
           </div>
           <div class="d-flex">
             <p>{{ tweet.screenName }}</p>
@@ -39,6 +39,7 @@ import Retweet from './RetweetComponent.vue';
 import UpdateTweet from './UpdateTweetComponent.vue';
 import DestroyTweet from './DestroyTweetComponent.vue';
 import Comment from './CommentComponent.vue';
+import TWEET_STATUS from '../consts.js';
 
 export default {
   props: {
@@ -58,6 +59,7 @@ export default {
     const is_favo = ref(true);
     const is_retweet = ref(true);
     const userName = ref();
+    const tweetStatus = ref(TWEET_STATUS);
 
     const getName = async () => {
       if (props.tweet.state != '0' && props.tweet.state != undefined) {
@@ -80,7 +82,8 @@ export default {
       userName,
       emitFavorite,
       emitRetweet,
-      props
+      props,
+      tweetStatus
     }
   }
 };
