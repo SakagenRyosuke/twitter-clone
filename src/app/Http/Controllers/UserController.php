@@ -72,7 +72,7 @@ class UserController extends Controller
             "user" => $user,
             "followingCount" => $follow->getFollowingCount($user["id"]),
             "followedCount" => $follow->getFollowedCount($user["id"]),
-            "isAuthUser" => Auth::id() == $user["id"] ? 1 : 0,
+            "isAuthUser" => Auth::id() === $user["id"] ? 1 : 0,
             "tweetsCount" => $tweet->getTweetCount($user["id"]),
             "isFollow" => $follow->isFollow($user["id"], Auth::id())
         ];
@@ -86,7 +86,7 @@ class UserController extends Controller
      */
     public function isLoginUser(int $user): int
     {
-        return  Auth::id() == $user ? 1 : 0;
+        return  Auth::id() === $user ? 1 : 0;
     }
 
     /**

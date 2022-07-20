@@ -43,7 +43,7 @@ class Follow extends Model
     public function isFollow(int $id, int $authUserId): int
     {
         return $this->where('followingId', $authUserId)
-            ->where('followedId', $id)->exists() == true ? 1 : 0;
+            ->where('followedId', $id)->exists() === true ? 1 : 0;
     }
 
     /**

@@ -77,6 +77,6 @@ class Favorite extends Model
     public function getIsFavorite(int $tweetId): int
     {
         return $this->where('tweetId', $tweetId)
-            ->exists() == true ? 1 : 0;
+            ->exists() === true ? 1 : 0;
     }
 }
