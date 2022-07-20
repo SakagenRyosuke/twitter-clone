@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Follow;
 use App\Models\Timeline;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class TimelineController extends Controller
@@ -32,5 +33,20 @@ class TimelineController extends Controller
         $timelineIds = $follow->getFollowIds(Auth::id());
         array_push($timelineIds, Auth::id());
         return $timeline->getTimelines($timelineIds);
+    }
+
+    /**
+     * タイムライン用のユーザー名を取得
+     * 
+     * @param \App\Models\User $user
+     * @param \App\Models\Follow $follow
+     * @return array
+     */
+    public function getTimelineNames(User $user, Follow $follow): array
+    {
+        $timelineIds = $follow->getFollowIds(Auth::id());
+        array_push($timelineIds, Auth::id());
+        $timelineNames = $user->getTimelineNames($timelineIds);
+        return array_combine($timelineIds, $timelineNames);
     }
 }

@@ -91,4 +91,16 @@ class User extends Authenticatable
         return $this->where('id', $userId)
             ->select('name')->first();
     }
+
+    /**
+     * フォローしているユーザー名の取得
+     * 
+     * @param array $timelineIds
+     * @return array
+     */
+    public function getTimelineNames(array $timelineIds): array
+    {
+        return $this->whereIn('id', $timelineIds)
+            ->select('name')->get()->pluck('name')->toArray();
+    }
 }

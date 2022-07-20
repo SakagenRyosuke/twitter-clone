@@ -33,9 +33,10 @@
       </div>
       <div class="container col-md-12" v-show="user, tweets">
         <ul class="ps-0">
-          <li class="card" v-for="tweet in tweets">
+          <li class="card" v-for="tweet in tweets" v-if="userNamesList">
             <Tweet :tweet="tweet" :isLoginUser="isLoginUser" :isFavorite="favoriteIds.includes(tweet.id)"
-              :isRetweet="retweetIds.includes(tweet.id)" @emitFavorite="emitFavorite" @emitRetweet="emitRetweet">
+              :userName="userNamesList[tweet.timelineUserId]" :isRetweet="retweetIds.includes(tweet.id)"
+              @emitFavorite="emitFavorite" @emitRetweet="emitRetweet">
             </Tweet>
           </li>
         </ul>
@@ -72,11 +73,13 @@ export default {
     const page = ref(0);
     const favoriteIds = ref([]);
     const retweetIds = ref([]);
+    const userNamesList = ref();
 
     const getData = async () => {
       const getProfile = axios.get(`/api/userProfile/${props.id}`);
       const getTweet = axios.get(`/api/timeline/${props.id}?page=${++page.value}`);
       const getTweetStatus = axios.get('/api/tweetStatus');
+      const userNames = axios.get('/api/timelines/userNames');
       const profileData = await getProfile;
       user.value = profileData.data.user;
       isLoginUser.value = profileData.data.isAuthUser;
@@ -92,6 +95,9 @@ export default {
         }
         is_loading.value = false;
       }
+
+      const userNamesData = await userNames;
+      userNamesList.value = userNamesData.data;
 
       const tweetStatus = await getTweetStatus;
       favoriteIds.value = tweetStatus.data.favoriteIds;
@@ -148,6 +154,7 @@ export default {
       is_loading,
       favoriteIds,
       retweetIds,
+      userNamesList,
       emitFavorite,
       emitRetweet,
       emitFollow

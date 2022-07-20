@@ -4,8 +4,8 @@
       <div class="card-haeder p-3">
         <div class="ms-5">
           <div v-show="tweet.state != '0'">
-            <span v-show="tweet.state === tweetStatus.favorite">{{ userName }}がいいねしました</span>
-            <span v-show="tweet.state === tweetStatus.retweet">{{ userName }}がリツイートしました</span>
+            <span v-show="tweet.state === tweetStatus.favorite">{{ props.userName }}がいいねしました</span>
+            <span v-show="tweet.state === tweetStatus.retweet">{{ props.userName }}がリツイートしました</span>
           </div>
           <div class="d-flex">
             <p>{{ tweet.screenName }}</p>
@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import Favorite from './FavoriteComponent.vue';
 import Retweet from './RetweetComponent.vue';
 import UpdateTweet from './UpdateTweetComponent.vue';
@@ -46,7 +46,8 @@ export default {
     'tweet': Object,
     'isLoginUser': Number,
     'isRetweet': Boolean,
-    'isFavorite': Boolean
+    'isFavorite': Boolean,
+    'userName': String,
   },
   components: {
     Favorite,
@@ -61,21 +62,12 @@ export default {
     const userName = ref();
     const tweetStatus = ref(TWEET_STATUS);
 
-    const getName = async () => {
-      if (props.tweet.state != '0' && props.tweet.state != undefined) {
-        const nameData = await axios.get(`/api/userName/${props.tweet.timelineUserId}`);
-        userName.value = nameData.data.name
-      }
-    }
     const emitFavorite = (params) => {
       context.emit('emitFavorite', params, props.tweet.id);
     }
     const emitRetweet = (params) => {
       context.emit('emitRetweet', params, props.tweet.id);
     }
-    onMounted(() => {
-      getName()
-    })
     return {
       is_favo,
       is_retweet,

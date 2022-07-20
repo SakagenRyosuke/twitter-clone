@@ -1,10 +1,10 @@
 <template>
   <div class="container col-md-12 mt-3">
     <ul class="ps-0">
-      <li class="card" v-for="tweet in tweets">
+      <li class="card" v-for="tweet in tweets" v-if="userNamesList">
         <Tweet :tweet="tweet" :isLoginUser="authId === tweet.userId ? 1 : 0"
-          :isFavorite="favoriteIds.includes(tweet.id)" :isRetweet="retweetIds.includes(tweet.id)"
-          @emitFavorite="emitFavorite" @emitRetweet="emitRetweet"></Tweet>
+          :userName="userNamesList[tweet.timelineUserId]" :isFavorite="favoriteIds.includes(tweet.id)"
+          :isRetweet="retweetIds.includes(tweet.id)" @emitFavorite="emitFavorite" @emitRetweet="emitRetweet"></Tweet>
       </li>
     </ul>
   </div>
@@ -25,11 +25,13 @@ export default {
     const favoriteIds = ref([])
     const retweetIds = ref([])
     const authId = ref()
+    const userNamesList = ref();
 
     const getData = async () => {
       const getTweet = axios.get(`/api/timelines?page=${++page.value}`);
       const getTweetStatus = axios.get('/api/tweetStatus');
       const getAuthId = axios.get('/api/authId');
+      const userNames = axios.get('/api/timelines/userNames');
 
       const tweetData = await getTweet;
       if (tweetData.data.last_page >= page.value) {
@@ -37,6 +39,9 @@ export default {
           tweets.value.push(element);
         }
       }
+
+      const userNamesData = await userNames;
+      userNamesList.value = userNamesData.data;
 
       const tweetStatus = await getTweetStatus;
       favoriteIds.value = tweetStatus.data.favoriteIds;
@@ -88,6 +93,7 @@ export default {
       favoriteIds,
       retweetIds,
       authId,
+      userNamesList,
       emitFavorite,
       emitRetweet
     }

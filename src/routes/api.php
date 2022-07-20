@@ -67,6 +67,16 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('/timeline/{userId}', [TimelineController::class, 'getTimeline']);
     /**
+     * タイムラインの取得
+     * HomeComponent
+     */
+    Route::get('/timelines', [TimelineController::class, 'getTimelines']);
+    /**
+     * タイムライン用の名前取得
+     * HomeComponent
+     */
+    Route::get('/timelines/userNames', [TimelineController::class, 'getTimelineNames']);
+    /**
      * ログインユーザーのフォローリストの取得
      * FollowButtonComponent
      */
@@ -141,9 +151,4 @@ Route::middleware('auth')->group(function () {
      * TweetDetailComponent
      */
     Route::get('/comments/{tweetId}', [CommentController::class, 'index']);
-    /**
-     * Comment一覧の取得
-     * TweetDetailComponent
-     */
-    Route::get('/timelines', [TimelineController::class, 'getTimelines']);
 });
