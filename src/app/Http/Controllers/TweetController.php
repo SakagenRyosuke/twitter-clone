@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Consts\TweetStatus;
 use App\Http\Requests\Tweet\PostRequest;
 use App\Models\Favorite;
-use App\Models\Follow;
 use App\Models\Retweet;
 use App\Models\Timeline;
 use App\Models\Tweet;
