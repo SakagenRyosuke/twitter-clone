@@ -1,8 +1,9 @@
 <template>
   <div class="container col-md-12">
     <div class="card mt-5 mb-2">
-      <Tweet v-if="tweet" :tweet="tweet.tweet" :isFavorite="tweet.isFavorite === 1 ? true : false"
-        :isRetweet="tweet.isRetweet === 1 ? true : false" :isLoginUser="authId === tweet.tweet.userId ? 1 : 0"></Tweet>
+      <Tweet v-if="tweet" :tweet="tweet.tweet" :isFavorite="tweet.isFavorite === 1 ? isFavorite : !isFavorite"
+        :isRetweet="tweet.isRetweet === 1 ? isRetweet : !isRetweet" :isLoginUser="authId === tweet.tweet.userId ? 1 : 0"
+        @emitFavorite="emitFavorite" @emitRetweet="emitRetweet"></Tweet>
     </div>
     <div class="container col-md-12" v-show="comments">
       <ul class="ps-0">
@@ -48,6 +49,9 @@ export default {
     const is_loading = ref(false);
     const tweet = ref();
     const authId = ref();
+    const isFavorite = ref(true);
+    const isRetweet = ref(true);
+
     const getData = async () => {
       is_loading.value = true;
       const getTweet = axios.get(`/api/tweet/${props.id}`);
@@ -79,6 +83,12 @@ export default {
         is_loading.value = false;
       };
     }
+    const emitFavorite = () => {
+      isFavorite.value = !isFavorite.value
+    }
+    const emitRetweet = () => {
+      isRetweet.value = !isRetweet.value
+    }
     onMounted(() => {
       getData()
       window.addEventListener('scroll', () => {
@@ -91,7 +101,11 @@ export default {
     return {
       tweet,
       comments,
-      authId
+      authId,
+      isFavorite,
+      isRetweet,
+      emitFavorite,
+      emitRetweet
     }
   },
 };
