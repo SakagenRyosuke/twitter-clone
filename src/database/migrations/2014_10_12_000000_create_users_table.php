@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique()->null()->comment('アカウント名');
             $table->string('screenName');
-            $table->string('profileImage')->nullable()->comment('プロフィール画像');
+            $table->string('profileImage')->nullable()->default('/images/noImage.svg')->comment('プロフィール画像');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="container col-md-12 mt-5">
+      <div class="container col-md-12 mt-3">
         <ul class="ps-0">
           <li class="card" v-for="user in userList">
             <router-link :to="'/home/user-profile/' + user.id">
@@ -14,7 +14,8 @@
               </div>
             </router-link>
             <div class="followButton">
-              <FollowButton :id="user.id" :isFollow="followIdsData.includes(user.id)"></FollowButton>
+              <FollowButton :id="user.id" :isFollow="followIdsData.includes(user.id)" @emitFollow="emitFollow">
+              </FollowButton>
             </div>
           </li>
         </ul>
@@ -27,6 +28,7 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import FollowButton from './FollowButtonComponent.vue';
+
 export default {
   components: {
     FollowButton
@@ -38,7 +40,6 @@ export default {
     const text = ref("Show More");
     const is_loading = ref(true);
     const followIdsData = ref([]);
-    const stop = ref(false);
 
     const getData = async () => {
       is_loading.value = true;
@@ -55,10 +56,18 @@ export default {
       followIdsData.value = followIds.data;
       getData();
     }
+    const emitFollow = (bool, userId) => {
+      if (bool) {
+        followIdsData.value.push(userId);
+      } else {
+        const index = followIdsData.value.indexOf(userId);
+        followIdsData.value.splice(index, 1)
+      }
+    }
     onMounted(() => {
       getFollowIds()
       window.addEventListener('scroll', () => {
-        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400 
+        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400
           && is_loading.value === false) {
           getData()
         }
@@ -70,7 +79,8 @@ export default {
       text,
       is_loading,
       followIdsData,
-      getData
+      getData,
+      emitFollow
     }
   }
 };
@@ -92,7 +102,7 @@ p {
 
 .followButton {
   position: absolute;
-  left: 90%;
+  left: 85%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
@@ -130,5 +140,9 @@ button {
 .is_showMore:hover {
   opacity: .85;
   color: #fff;
+}
+
+img {
+  object-fit: cover;
 }
 </style>

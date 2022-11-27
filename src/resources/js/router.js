@@ -1,12 +1,15 @@
-import ExampleComponent from "./components/ExampleComponent.vue";
+import HomeComponent from "./components/HomeComponent.vue";
 import UserListComponent from "./components/UserListComponent.vue";
 import UserListDetailComponent from "./components/UserListDetailComponent.vue";
+import TweetDetailComponent from "./components/TweetDetailComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
+    { path: "/", redirect: "/home" },
+    { path: "/js/bootstrap.esm.js.map", redirect: "/home" },
     {
         path: "/home",
-        component: ExampleComponent,
+        component: HomeComponent,
         name: "home",
     },
     {
@@ -18,6 +21,12 @@ const routes = [
         path: "/home/user-profile/:id",
         component: UserListDetailComponent,
         name: "userListDetail",
+        props: true,
+    },
+    {
+        path: "/home/tweet/detail/:id",
+        component: TweetDetailComponent,
+        name: "tweetDetail",
         props: true,
     },
 ];

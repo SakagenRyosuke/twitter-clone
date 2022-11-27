@@ -3,11 +3,11 @@
     <div class="row justify-content-center">
       <div class="container col-md-12">
         <div class="my-3 p-3 bg-body rounded shadow-sm" v-show="user">
-          <div class="d-flex mb-3">
+          <div class="d-flex mb-3 profile">
             <div class="img me-5">
               <img class="rounded-circle w-100 h-100" v-if="user" :src="user.profileImage" alt="profileImage">
             </div>
-            <div class="d-flex align-items-end">
+            <div class="d-flex align-items-end counts">
               <div class="me-3 px-3 text-center">
                 <h2 class="fs-4" v-if="user">{{ tweetsCount }}</h2>
                 <p>Tweets</p>
@@ -26,32 +26,18 @@
             <h1 class="p-0 m-0 fs-2 text-center" v-if="user">{{ user.screenName }}</h1>
             <p class="p-0 m-0 text-center" v-if="user">{{ user.name }}</p>
           </div>
-          <FollowButton v-if="is_follow" v-show="isLoginUser === 0" :id="id" :isFollow="is_follow"></FollowButton>
+          <FollowButton v-show="isLoginUser === 0" :id="id" :isFollow="is_follow" @emitFollow="emitFollow">
+          </FollowButton>
           <EditButton v-show="isLoginUser === 1"></EditButton>
         </div>
       </div>
       <div class="container col-md-12" v-show="user, tweets">
         <ul class="ps-0">
-          <li class="card" v-for="tweet in tweets">
-            <router-link :to="'/tweet/detail/' + tweet.id">
-              <div class="card-haeder p-3">
-                <div class="ms-5">
-                  <div class="d-flex">
-                    <p v-if="user">{{ user.screenName }}</p>
-                    <span class="ms-2" v-if="user">{{ user.name }}</span>
-                  </div>
-                  <div class="tweet-text" v-if="tweets">
-                    <p>{{ tweet.text }}</p>
-                    <span>{{ tweet.created_at }}</span>
-                  </div>
-                </div>
-              </div>
-            </router-link>
-            <div class="profileImage">
-              <router-link :to="'/home/user-profile/' + id">
-                <img class="rounded-circle" width="50" height="50" v-if="user" :src="user.profileImage" alt="">
-              </router-link>
-            </div>
+          <li class="card" v-for="tweet in tweets" v-if="userNamesList">
+            <Tweet :tweet="tweet" :isLoginUser="isLoginUser" :isFavorite="favoriteIds.includes(tweet.id)"
+              :userName="userNamesList[tweet.timelineUserId]" :isRetweet="retweetIds.includes(tweet.id)"
+              @emitFavorite="emitFavorite" @emitRetweet="emitRetweet">
+            </Tweet>
           </li>
         </ul>
       </div>
@@ -59,14 +45,17 @@
   </div>
 </template>
 <script>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import FollowButton from './FollowButtonComponent.vue';
 import EditButton from './EditButtonComponent.vue';
+import Tweet from './TweetComponent.vue';
 import axios from 'axios';
+
 export default {
   components: {
     FollowButton,
-    EditButton
+    EditButton,
+    Tweet
   },
   props: {
     id: String
@@ -82,10 +71,15 @@ export default {
     const is_loading = ref(true);
     const is_follow = ref();
     const page = ref(0);
+    const favoriteIds = ref([]);
+    const retweetIds = ref([]);
+    const userNamesList = ref();
 
     const getData = async () => {
       const getProfile = axios.get(`/api/userProfile/${props.id}`);
-      const getTweet = axios.get(`/api/timeLine/${props.id}?page=${++page.value}`);
+      const getTweet = axios.get(`/api/timeline/${props.id}?page=${++page.value}`);
+      const getTweetStatus = axios.get('/api/tweetStatus');
+      const userNames = axios.get('/api/timelines/userNames');
       const profileData = await getProfile;
       user.value = profileData.data.user;
       isLoginUser.value = profileData.data.isAuthUser;
@@ -101,10 +95,17 @@ export default {
         }
         is_loading.value = false;
       }
+
+      const userNamesData = await userNames;
+      userNamesList.value = userNamesData.data;
+
+      const tweetStatus = await getTweetStatus;
+      favoriteIds.value = tweetStatus.data.favoriteIds;
+      retweetIds.value = tweetStatus.data.retweetIds;
     }
     async function addData() {
       is_loading.value = true;
-      const getTweet = axios.get(`/api/timeLine/${props.id}?page=${++page.value}`);
+      const getTweet = axios.get(`/api/timeline/${props.id}?page=${++page.value}`);
       const tweetData = await getTweet;
       if (tweetData.data.last_page >= page.value) {
         for (const element of tweetData.data.data) {
@@ -113,14 +114,33 @@ export default {
         is_loading.value = false;
       }
     }
+    const emitFavorite = (bool, tweetId) => {
+      if (bool) {
+        favoriteIds.value.push(tweetId);
+      } else {
+        const index = favoriteIds.value.indexOf(tweetId);
+        favoriteIds.value.splice(index, 1)
+      }
+    }
+    const emitRetweet = (bool, tweetId) => {
+      if (bool) {
+        retweetIds.value.push(tweetId);
+      } else {
+        const index = retweetIds.value.indexOf(tweetId);
+        retweetIds.value.splice(index, 1)
+      }
+    }
+    const emitFollow = (bool, userId) => {
+      is_follow.value = bool
+    }
     onMounted(() => {
       getData(),
-      window.addEventListener('scroll', () => {
-        if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400
-          && is_loading.value === false) {
-          addData()
-        }
-      })
+        window.addEventListener('scroll', () => {
+          if (document.body.clientHeight - window.innerHeight - window.pageYOffset < 400
+            && is_loading.value === false) {
+            addData()
+          }
+        })
     })
     return {
       is_follow,
@@ -131,9 +151,22 @@ export default {
       isLoginUser,
       tweets,
       tweetsCount,
-      is_loading
+      is_loading,
+      favoriteIds,
+      retweetIds,
+      userNamesList,
+      emitFavorite,
+      emitRetweet,
+      emitFollow
     }
   },
+  watch: {
+    $route(to, from) {
+      if (from.name === to.name && from.params.id != to.params.id) {
+        location.reload();
+      }
+    }
+  }
 };
 </script>
 <style scoped>
@@ -156,58 +189,34 @@ li:hover {
   background-color: rgba(245, 245, 245, 0.8) !important;
 }
 
-.showMoreButton {
-  margin-top: 30px;
-}
-
-button {
-  cursor: default;
-  padding: 5px 12px;
-  border-radius: 3px;
-  font-size: 14px;
-  color: #333;
-  border: none;
-  background-color: #f8f9fa;
-}
-
-.is_showMore {
-  cursor: pointer;
-  background-color: #0d6efd;
-  border: 1px #0d6efd solid;
-  color: #fff;
-  transition: all .3s;
-}
-
-.is_showMore:hover {
-  opacity: .85;
-  color: #fff;
-}
-
 .is_loading {
   pointer-events: none;
 }
 
-a {
-  text-decoration: none;
+img {
+  object-fit: cover;
 }
 
-p,
-span {
-  color: #333;
-}
+@media only screen and (max-width:700px) {
 
-span {
-  opacity: .8;
-}
+  .profile img,
+  .img {
+    width: 75px !important;
+    height: 75px !important;
+  }
 
-.profileImage {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  cursor: pointer;
-}
+  .img {
+    margin-right: 10px !important;
+  }
 
-.tweet-text {
-  color: #333;
+  .counts div {
+    margin: 5px !important;
+    padding: 5px !important;
+  }
+
+  .profile h2,
+  .profile p {
+    font-size: 14px !important;
+  }
 }
 </style>

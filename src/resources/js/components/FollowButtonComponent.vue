@@ -1,19 +1,17 @@
 <template>
   <div class="wrapper">
-    <button :class="[is_follow ? 'is_follow' : '']" @click="doFollow">{{ is_follow
+    <button :class="[props.isFollow ? 'is_follow' : '']" @click="execEmit">{{ props.isFollow
         ? "Following" : "Follow"
     }}</button>
   </div>
 </template>
 <script>
-import { ref } from 'vue';
 export default {
   props: {
     id: Number,
     isFollow: Boolean
   },
-  setup(props) {
-    const is_follow = ref(props.isFollow)
+  setup(props, context) {
     async function follow() {
       try {
         await axios.post('/api/users/' + props.id + '/follow');
@@ -29,18 +27,16 @@ export default {
       }
     }
     const doFollow = () => {
-      is_follow.value = !is_follow.value;
-      if (is_follow.value === true) {
-        text.value = "Following";
-        follow()
-      } else {
-        text.value = "Follow";
-        unfollow();
-      }
+      props.isFollow ? unfollow() : follow();
+    }
+    const execEmit = () => {
+      doFollow();
+      context.emit('emitFollow', !props.isFollow, props.id);
     }
     return {
-      is_follow,
-      doFollow
+      doFollow,
+      execEmit,
+      props
     }
   },
 };

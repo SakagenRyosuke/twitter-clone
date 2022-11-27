@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\RetweetController;
+use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -43,10 +47,35 @@ Route::middleware('auth')->group(function () {
      */
     Route::get('/userProfile/{user}', [UserController::class, 'show']);
     /**
+     * AuthUserのプロフィール編集
+     * EditButtonComponent
+     */
+    Route::post('/editUser', [UserController::class, 'update']);
+    /**
+     * AuthUserのidを取得
+     * EditButtonComponent
+     */
+    Route::get('/authId', [UserController::class, 'getAuthId']);
+    /**
+     * userNameの取得
+     * TweetComponent
+     */
+    Route::get('/userName/{userId}', [UserController::class, 'getUserName']);
+    /**
      * idが引数と一致するユーザーのtweetを取得
      * UserListDetailComponent
      */
-    Route::get('/timeLine/{id}', [TweetController::class, 'index']);
+    Route::get('/timeline/{userId}', [TimelineController::class, 'getTimeline']);
+    /**
+     * タイムラインの取得
+     * HomeComponent
+     */
+    Route::get('/timelines', [TimelineController::class, 'getTimelines']);
+    /**
+     * タイムライン用の名前取得
+     * HomeComponent
+     */
+    Route::get('/timelines/userNames', [TimelineController::class, 'getTimelineNames']);
     /**
      * ログインユーザーのフォローリストの取得
      * FollowButtonComponent
@@ -67,4 +96,59 @@ Route::middleware('auth')->group(function () {
      * FollowButtonComponent
      */
     Route::get('/followIds', [FollowController::class, 'getFollowIds']);
+    /**
+     * Tweetの作成
+     * CreateTweetComponent
+     */
+    Route::post('/createTweet', [TweetController::class, 'store']);
+    /**
+     * Tweetの編集
+     * UpdateTweetComponent
+     */
+    Route::post('/updateTweet/{tweetId}', [TweetController::class, 'update']);
+    /**
+     * Tweetの削除
+     * DestroyTweetComponent
+     */
+    Route::post('/destroyTweet/{tweetId}', [TweetController::class, 'destroy']);
+    /**
+     * Tweetの状態を取得
+     * UserListDetailComponent
+     */
+    Route::get('/tweetStatus', [TweetController::class, 'getTweetStatus']);
+    /**
+     * Tweet単体の情報と状態を取得
+     * TweetDetailComponent
+     */
+    Route::get('/tweet/{tweetId}', [TweetController::class, 'show']);
+    /**
+     * ファボする
+     * FavoriteComponent
+     */
+    Route::post('/tweets/{tweetId}/favorite', [FavoriteController::class, 'favorite']);
+    /**
+     * ファボを解除する
+     * FavoriteComponent
+     */
+    Route::post('/tweets/{tweetId}/unfavorite', [FavoriteController::class, 'unfavorite']);
+    /**
+     * リツイートする
+     * RetweetComponent
+     */
+    Route::post('/tweets/{tweetId}/retweet', [RetweetController::class, 'retweet']);
+    /**
+     * リツイートを解除する
+     * RetweetComponent
+     */
+    Route::post('/tweets/{tweetId}/unretweet', [RetweetController::class, 'unretweet']);
+    /**
+     * Commentの作成
+     * CreateCommentComponent
+     */
+    Route::post('/createComment/{tweetId}', [CommentController::class, 'store']);
+    /**
+     * Comment一覧の取得
+     * TweetDetailComponent
+     */
+    Route::get('/comments/{tweetId}', [CommentController::class, 'index']);
 });

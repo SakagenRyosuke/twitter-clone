@@ -45,8 +45,9 @@ class User extends Authenticatable
     ];
 
     /**
-     * 引数のページ数に応じてusersテーブルから10件ずつ追加で取得して該当するユーザーの情報をobjectで返す
-     *
+     * ユーザーリストの取得
+     * 
+     * @param int $authUserId
      * @return object
      */
     public function getUserList(int $authUserId): object
@@ -54,5 +55,52 @@ class User extends Authenticatable
         return $this->where('id', '<>', $authUserId)
             ->select("id", "name", "screenName", "profileImage")
             ->paginate(Paginate::NUM_USER_PER_PAGE);
+    }
+
+    /**
+     * 認証ユーザーのみユーザー情報更新
+     * 
+     * @param int $authId
+     * @param object $request
+     * @return bool
+     */
+    public function updateUser(int $authId, object $request): bool
+    {
+        $user = $this->where('id', $authId)->first();
+        $user->screenName = $request->screenName;
+
+        if ($request->file('profileImage')) {
+            $imageName = $request->file('profileImage')
+                ->hashName();
+            $user->profileImage = '/storage/user/' . $imageName;
+            $request->file('profileImage')
+                ->storeAs('public/user', $imageName);
+        }
+
+        return $user->save();
+    }
+
+    /**
+     * 名前取得
+     * 
+     * @param int $userId
+     * @return string
+     */
+    public function getUserName(int $userId): string
+    {
+        return $this->where('id', $userId)
+            ->select('name')->first();
+    }
+
+    /**
+     * フォローしているユーザー名の取得
+     * 
+     * @param array $timelineIds
+     * @return array
+     */
+    public function getTimelineNames(array $timelineIds): array
+    {
+        return $this->whereIn('id', $timelineIds)
+            ->select('name')->get()->pluck('name')->toArray();
     }
 }

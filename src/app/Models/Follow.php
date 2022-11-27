@@ -14,9 +14,10 @@ class Follow extends Model
     /**
      * フォロー数取得
      * 
-     * @return integer
+     * @param int $id
+     * @return int
      */
-    public function getFollowingCount($id): int
+    public function getFollowingCount(int $id): int
     {
         return $this->where('followingId', $id)->count();
     }
@@ -24,9 +25,10 @@ class Follow extends Model
     /**
      * フォロワー数取得
      * 
-     * @return integer
+     * @param int $id
+     * @return int
      */
-    public function getFollowedCount($id): int
+    public function getFollowedCount(int $id): int
     {
         return $this->where('followedId', $id)->count();
     }
@@ -34,11 +36,14 @@ class Follow extends Model
     /**
      * authUserがフォローしているか取得
      * 
+     * @param int $id
+     * @param int $authUserId
      * @return int
      */
     public function isFollow(int $id, int $authUserId): int
     {
-        return $this->where('followingId', $authUserId)->where('followedId', $id)->exists() == true ? 1 : 0;
+        return $this->where('followingId', $authUserId)
+            ->where('followedId', $id)->exists() === true ? 1 : 0;
     }
 
     /**
@@ -46,6 +51,8 @@ class Follow extends Model
      * 
      * レコードを作成しfollowsテーブルに追加
      * 
+     * @param int $id
+     * @param int $authUserId
      * @return void
      */
     public function follow(int $id, int $authUserId)
@@ -61,6 +68,8 @@ class Follow extends Model
      * 
      * followsテーブルに検索をかけて、一致したものがあった場合レコードをデリートする
      * 
+     * @param int $id
+     * @param int $authUserId
      * @return void
      */
     public function unfollow(int $id, int $authUserId)
@@ -76,11 +85,13 @@ class Follow extends Model
     /**
      * フォローリストの取得
      * 
+     * @param int $authUserId
      * @return array
      */
     public function getFollowIds(int $authUserId): array
     {
-        $followIdsData = $this->where('followingId', $authUserId)->get('followedId')->pluck('followedId')->toArray();
+        $followIdsData = $this->where('followingId', $authUserId)
+            ->get('followedId')->pluck('followedId')->toArray();
         return array_map('intval', $followIdsData);
     }
 }
